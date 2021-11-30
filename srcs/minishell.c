@@ -6,149 +6,79 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:32:08 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/11/25 18:32:38 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:20:55 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	debug(t_set *set, char **input)
+void	debug(t_list *lst)
 {
 	int	i;
 
 	i = 0;
-	while (input[i])
+	while (lst)
 	{
-		printf("input [%d] : %s\n", i, input[i]);
+		printf("cmd [%d] : %s\n", i, (char *)lst->content);
+		lst = lst->next;
 		i++;
 	}
 }
 
-int	init_input(t_set *set, char *line)
+/*int	handle_redirection(t_cmds *cmds, t_list *cmd)
 {
-	int	i;
-	int	j;
-	int	num;
-
-	i = -1;
-	num = 0;
-	while (line[++i])
-		if (line[i] != ' ' && (!line[i + 1] || line[i + 1] == ' '))
-			num++;
-	set->input = (char **)malloc(sizeof(char *) * (num + 1));
-	if (!set->input)
-		return (error_msg("malloc"));
-	i = -1;
-	j = 0;
-	while (line[++i])
+	while (cmd->content)
 	{
-		num = 0;
-		while (line[i] && line[i] != ' ')
-		{
-			i++;
-			num++;
-		}
-		set->input[j] = (char *)malloc(sizeof(char) * (num + 1));
-		if (!set->input[j])
-			return (error_msg("malloc"));
-		j++;
+
 	}
-	return (TRUE);
-}
+}*/
 
-int	sort_input(t_set *set, char *line)
+int	handle_pipe(char *inputs)
 {
-	int	i;
-	int	j;
-	int	k;
-
-	if (init_input(set, line) == FALSE)
-		return (FALSE);
-	i = 0;
-	j = 0;
-	while (line[i])
-	{
-		while (line[i] && line[i] == ' ')
-			i++;
-		k = 0;
-		while (line[i] && line[i] != ' ')
-		{
-			set->input[j][k] = line[i];
-			i++;
-			k++;
-		}
-		set->input[j][k] = '\0';
-		j++;
-	}
-	set->input[j] = NULL;
-	return (TRUE);
-}
-
-int	sort_redirection(t_set *set, char *line)
-{
-	char	*temp;
+	t_cmd	cmd;
+	char	**input;
 	int		i;
 
-	temp = ft_strrchr(line, '<');
-	if (temp != NULL && temp[1] == '<')
-	{
-		i = 2;
-		while (temp[i] == ' ')
-			i++;
-		set->limiter =
-	}
-	else if (temp != NULL)
-	{
-		i = 1;
-		while (temp[i] == ' ')
-			i++;
-		set->infile = open(&temp[i], O_RDONLY);
-		if (set->infile < 0)
-			return (error_msg("open"));
-	}
-	temp = ft_strrchr(line, '>');
-	if (temp != NULL && temp[1] == '>')
-	{
-		i = 2;
-		while (temp[i] == ' ')
-			i++;
-		set->outfile = open(&temp[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (set->outfile < 0)
-			return (error_msg("open"));
-	}
-	else if (temp != NULL)
-	{
-		i = 1;
-		while (temp[i] == ' ')
-			i++;
-		set->outfile = open(&temp[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (set->outfile < 0)
-			return (error_msg("open"));
-	}
+	ft_memset(&cmd, 0, sizeof(cmd));
+	input = ft_split(inputs, ' ');
+	i = -1;
+	while (input[++i])
+		ft_lstadd_back(&cmd.lst, ft_lstnew(input[i]));
+	/*if (handle_redirection(&cmds, &cmds.cmd) == FALSE)
+		return (FALSE);*/
+	debug(cmd.lst);
+	ft_lstclear(&cmd.lst, free);
 	return (TRUE);
 }
 
-int	parse_input(t_set *set, char *line)
+int	parse_input(char *line)
 {
-	set->input = ft_split(line, '|');
-	if (sort_redirection(set, line) == FALSE)
-		return (FALSE);
-	if (sort_input(set, line) == FALSE)
-		return (FALSE);
-	debug(set, set->input);
+	char	**inputs;
+	int		i;
+
+	inputs = ft_split(line, '|');
+	i = -1;
+	while (inputs[++i])
+	{
+		if (handle_pipe(inputs[i]) == FALSE)
+			return (FALSE);
+		free(inputs[i]);
+	}
+	free(inputs);
 	return (TRUE);
 }
 
-int	get_input(t_set *set)
+int	get_input(void)
 {
 	char	*line;
 
 	line = readline("$ ");
 	if (line)
 	{
-		if (parse_input(set, line) == FALSE)
+		if (parse_input(line) == FALSE)
 			return (FALSE);
 	}
+	free(line);
 	return (TRUE);
 }
 
@@ -159,12 +89,8 @@ int	main(void)
 	init_set(&set);
 	while (1)
 	{
-		if (get_input(&set) == FALSE)
-		{
-			free_set(&set);
+		if (get_input() == FALSE)
 			break ;
-		}
-		free_set(&set);
 	}
 	return (0);
 }

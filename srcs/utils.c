@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/11/25 10:26:15 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/11/30 19:34:02 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,14 @@ int	error_msg(char *msg)
 	return (FALSE);
 }
 
-void	free_set(t_set *set)
+void	ft_free(char **p)
 {
 	int	i;
 
 	i = -1;
-	while (set->input[++i])
-	{
-		free(set->input[i]);
-		set->input[i] = NULL;
-	}
-	free(set->input);
-	set->input = NULL;
+	while (p[++i])
+		free(p[i]);
+	free(p);
 }
 
 void	init_set(t_set *set)

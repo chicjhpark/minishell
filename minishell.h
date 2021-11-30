@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/11/25 16:05:24 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/11/30 19:34:19 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,18 @@ typedef struct s_set
 {
 	struct termios	org_term;
 	struct termios	new_term;
-	char			**input;
-	int				infile;
-	int				outfile;
-	char			*limiter;
-	int				num_pipe;
 }					t_set;
 
+typedef struct s_cmd
+{
+	t_list	*lst;
+	char	*limiter;
+	char	*outfile;
+}					t_cmd;
+
+
 int		error_msg(char *msg);
-void	free_set(t_set *set);
+void	ft_free(char **p);
 void	init_set(t_set *set);
 
 #endif
