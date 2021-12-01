@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/20 22:32:59 by jaehpark          #+#    #+#             */
-/*   Updated: 2020/11/21 05:22:50 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/02 08:28:05 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	{
 		next = (*lst)->next;
 		del((*lst)->content);
+		(*lst)->content = NULL;
 		free(*lst);
+		*lst = NULL;
 		*lst = next;
 	}
 	*lst = NULL;

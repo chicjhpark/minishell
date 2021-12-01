@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/11/30 19:34:19 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/02 05:20:49 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,13 @@ typedef struct s_cmd
 {
 	t_list	*lst;
 	char	*limiter;
+	char	*infile;
 	char	*outfile;
 }					t_cmd;
 
 
 int		error_msg(char *msg);
-void	ft_free(char **p);
+void	ft_free(char **ptr);
 void	init_set(t_set *set);
 
 #endif

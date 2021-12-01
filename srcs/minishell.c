@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:32:08 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/11/30 20:20:55 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/02 08:27:30 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,57 @@ void	debug(t_list *lst)
 	}
 }
 
-/*int	handle_redirection(t_cmds *cmds, t_list *cmd)
+int	check_redirection(char content)
 {
-	while (cmd->content)
+	if (content == '<')
+		return (error_msg("syntax error near unexpected token '<'"));
+	else if (content == '>')
+		return (error_msg("syntax error near unexpected token '>'"));
+	return (TRUE);
+}
+
+int	cut_redirection(t_list *lst, char *content, int idx)
+{
+	char	*temp;
+
+	temp = NULL;
+
+}
+
+void	sort_redirection(t_cmd *cmd, t_list *lst)
+{
+	while (lst)
+	{
+		if (ft_strncmp("<<", lst->content, 2) == 0 && lst->content[2])
+		{
+			if (cut_redirection(lst, lst->content, 2) == FALSE)
+				return (FALSE);
+			ft_lstadd_front(&lst, ft_lstnew("<<"));
+		}
+		else if (lst->content[0] == '<' && lst->content[1])
+		{
+			ft_lstadd_front(&lst, ft_lstnew("<"));
+		}
+		else if (ft_strncmp(">>", lst->content, 2) == 0 && lst->content[2])
+		{
+			ft_lstadd_front(&lst, ft_lstnew(">>"));
+		}
+		else if (lst->content[0] == '>' && lst->content[1])
+		{
+			ft_lstadd_front(&lst, ft_lstnew(">"));
+		}
+		ft_lstdelone(lst, free);
+	}
+}
+
+int	handle_redirection(t_cmd *cmd, t_list *lst)
+{
+	sort_redirection(cmd, lst);
+	while (lst)
 	{
 
 	}
-}*/
+}
 
 int	handle_pipe(char *inputs)
 {
@@ -44,8 +88,8 @@ int	handle_pipe(char *inputs)
 	i = -1;
 	while (input[++i])
 		ft_lstadd_back(&cmd.lst, ft_lstnew(input[i]));
-	/*if (handle_redirection(&cmds, &cmds.cmd) == FALSE)
-		return (FALSE);*/
+	if (handle_redirection(&cmd, cmd.lst) == FALSE)
+		return (FALSE);
 	debug(cmd.lst);
 	ft_lstclear(&cmd.lst, free);
 	return (TRUE);
