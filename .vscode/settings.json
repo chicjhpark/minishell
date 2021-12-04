@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"ioctl.h": "c"
+		"ioctl.h": "c",
+		"libft.h": "c"
 	}
 }
