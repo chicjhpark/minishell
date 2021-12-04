@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:32:08 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/04 20:29:11 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/05 06:08:00 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,15 @@ int	check_redirection(t_cmd *cmd, t_list *lst)
 	while (lst)
 	{
 		if ((lst->content[0] == '<' || lst->content[0] == '>') && lst->next)
+		{
+			if ((lst->content[0] == '<' && lst->content[1] == '>') ||
+			(lst->content[0] == '>' && lst->content[1] == '<') ||
+			ft_strlen(lst->content) > 2)
+				return (error_msg(0, &lst->content[1]));
 			temp = lst->next->content;
-		if (temp[0] == '<' || temp[0] == '>')
-			return (error_msg(0, temp));
+			if (temp[0] == '<' || temp[0] == '>')
+				return (error_msg(0, temp));
+		}
 		if (ft_strncmp(lst->content, "<<", 3) == 0)
 			cmd->limiter = temp;
 		else if (ft_strncmp(lst->content, ">>", 3) == 0)
@@ -44,6 +50,7 @@ int	check_redirection(t_cmd *cmd, t_list *lst)
 		else if (lst->content[0] == '>')
 			cmd->outfile = temp;
 		lst = lst->next;
+		system("leaks minishell");
 	}
 	return (TRUE);
 }
@@ -55,7 +62,7 @@ int	handle_redirection(t_cmd *cmd, t_list *lst)
 	return (TRUE);
 }
 
-int	handle_pipe(char *inputs)
+void	handle_pipe(char *inputs)
 {
 	t_cmd	cmd;
 	char	**input;
@@ -64,22 +71,26 @@ int	handle_pipe(char *inputs)
 	ft_memset(&cmd, 0, sizeof(t_cmd));
 	input = ft_split(sort_redirection(inputs), ' ');
 	if (!input)
-		return (error_msg("malloc failed", 0));
+	{
+		free(input);
+		input = NULL;
+		error_msg("malloc failed", 0);
+		return ;
+	}
 	i = -1;
 	while (input[++i])
 		ft_lstadd_back(&cmd.lst, ft_lstnew(ft_strdup(input[i])));
+	ft_free(input);
 	if (handle_redirection(&cmd, cmd.lst) == FALSE)
 	{
-		ft_free(input);
-		return (FALSE);
+		ft_lstclear(&cmd.lst, free);
+		return ;
 	}
 	debug(cmd.lst);
-	ft_lstclear(&cmd.lst, 0);
-	ft_free(input);
-	return (TRUE);
+	ft_lstclear(&cmd.lst, free);
 }
 
-int	parse_input(char *line)
+void	parse_input(char *line)
 {
 	char	**inputs;
 	int		i;
@@ -87,18 +98,11 @@ int	parse_input(char *line)
 	inputs = ft_split(line, '|');
 	i = -1;
 	while (inputs[++i])
-	{
-		if (handle_pipe(inputs[i]) == FALSE)
-		{
-			ft_free(inputs);
-			return (FALSE);
-		}
-	}
+		handle_pipe(inputs[i]);
 	ft_free(inputs);
-	return (TRUE);
 }
 
-int	get_input(void)
+void	get_input(void)
 {
 	char	*line;
 
@@ -106,23 +110,11 @@ int	get_input(void)
 	//line = "<<<ls>>ls";
 	if (line)
 	{
-		if (parse_input(line) == FALSE)
-		{
-			free(line);
-			line = NULL;
-			return (FALSE);
-		}
+		parse_input(line);
+		//system("leaks minishell");
 	}
 	free(line);
 	line = NULL;
-	return (TRUE);
-}
-
-void	reset_set(t_set *set)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);
-	dup2(set->org_stdin, STDIN_FILENO);
-	close(set->org_stdin);
 }
 
 int	main(void)
@@ -132,11 +124,7 @@ int	main(void)
 	init_set(&set);
 	while (1)
 	{
-		if (get_input() == FALSE)
-		{
-			reset_set(&set);
-			return (1);
-		}
+		get_input();
 		reset_set(&set);
 	}
 	return (0);

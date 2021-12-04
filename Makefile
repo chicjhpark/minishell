@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2021/12/04 12:58:39 by jaehpark         ###   ########.fr        #
+#    Updated: 2021/12/04 20:37:50 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ INCS			= -Ilibft -I.
 
 SRCS_DIR		= srcs
 SRCS_NAME		= minishell.c \
-					utils.c
+					utils.c \
+					redirection.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 

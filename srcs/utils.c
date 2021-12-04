@@ -6,13 +6,13 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/04 20:16:48 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/04 23:43:07 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	error_msg(char *msg, char *type)
+int		error_msg(char *msg, char *type)
 {
 	if (!type)
 		printf("bash : %s : %s\n", strerror(errno), msg);
@@ -47,4 +47,11 @@ void	init_set(t_set *set)
 	set->new_term.c_cc[VMIN] = 1;
 	set->new_term.c_cc[VTIME] = 0;
 	tcsetattr(0, TCSANOW, &set->new_term);
+}
+
+void	reset_set(t_set *set)
+{
+	tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);
+	dup2(set->org_stdin, STDIN_FILENO);
+	close(set->org_stdin);
 }
