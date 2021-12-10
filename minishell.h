@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/04 23:42:44 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/10 12:01:07 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,8 @@ typedef struct s_set
 typedef struct s_cmd
 {
 	t_list	*lst;
-	t_list	*head;
 	char	*limiter;
-	char	*infile;
-	char	*outfile;
+	int		outfile;
 }					t_cmd;
 
 
@@ -48,7 +46,11 @@ int		error_msg(char *msg, char *type);
 void	ft_free(char **ptr);
 void	init_set(t_set *set);
 void	reset_set(t_set *set);
-void	divide_redirection(char *inputs, char *temp);
+char	*ft_strndup(char *s, int n);
+int		parse_quotation_mark(char *line, int *i);
 char	*sort_redirection(char *inputs);
+int		check_redirection(t_list *lst);
+int		handle_redirection(t_cmd *cmd, t_list *lst);
+int		init_redirection(t_cmd *cmd, t_list *lst);
 
 #endif

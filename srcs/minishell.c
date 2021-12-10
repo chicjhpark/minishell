@@ -5,101 +5,97 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/10 09:32:08 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/05 06:08:00 by jaehpark         ###   ########.fr       */
+/*   Created: 2021/12/07 15:19:17 by jaehpark          #+#    #+#             */
+/*   Updated: 2021/12/10 12:02:18 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	debug(t_list *lst)
+void	debug(t_list *lst, char *name)
 {
 	int	i;
 
 	i = 0;
 	while (lst)
 	{
-		printf("cmd [%d] : %s\n", i, (char *)lst->content);
+		printf("%s [%d] : %s!\n", name, i, (char *)lst->content);
 		lst = lst->next;
 		i++;
 	}
 }
 
-int	check_redirection(t_cmd *cmd, t_list *lst)
+int	parse_pipe(char *line, t_list **pipe)
+{
+	char	*save;
+	char	*temp;
+	int		i;
+
+	save = line;
+	i = -1;
+	while (line[++i])
+	{
+		if (parse_quotation_mark(line, &i) == FALSE)
+			return (FALSE);
+		if (line[i] == '|')
+		{
+			temp = ft_strndup(line, i);
+			if (temp == NULL)
+				return (error_msg("malloc", 0));
+			ft_lstadd_back(pipe, ft_lstnew(temp));
+			line = &line[i + 1];
+			if (!line[0])
+				break ;
+			i = -1;
+		}
+	}
+	ft_lstadd_back(pipe, ft_lstnew(ft_strdup(line)));
+	line = save;
+	return (TRUE);
+}
+
+int	check_pipe(t_list *pipe)
 {
 	char	*temp;
 
-	while (lst)
+	while (pipe)
 	{
-		if ((lst->content[0] == '<' || lst->content[0] == '>') && lst->next)
-		{
-			if ((lst->content[0] == '<' && lst->content[1] == '>') ||
-			(lst->content[0] == '>' && lst->content[1] == '<') ||
-			ft_strlen(lst->content) > 2)
-				return (error_msg(0, &lst->content[1]));
-			temp = lst->next->content;
-			if (temp[0] == '<' || temp[0] == '>')
-				return (error_msg(0, temp));
-		}
-		if (ft_strncmp(lst->content, "<<", 3) == 0)
-			cmd->limiter = temp;
-		else if (ft_strncmp(lst->content, ">>", 3) == 0)
-			cmd->outfile = temp;
-		else if (lst->content[0] == '<')
-			cmd->infile = temp;
-		else if (lst->content[0] == '>')
-			cmd->outfile = temp;
-		lst = lst->next;
-		system("leaks minishell");
+		temp = pipe->content;
+		pipe->content = ft_strtrim(temp, " ");
+		free(temp);
+		temp = NULL;
+		if (pipe->content[0] == '\0')
+			return (error_msg(0, "|"));
+		pipe = pipe->next;
 	}
 	return (TRUE);
 }
 
-int	handle_redirection(t_cmd *cmd, t_list *lst)
-{
-	if (check_redirection(cmd, lst) == FALSE)
-		return (FALSE);
-	return (TRUE);
-}
-
-void	handle_pipe(char *inputs)
+void	handle_pipe(char *pipe)
 {
 	t_cmd	cmd;
-	char	**input;
-	int		i;
 
-	ft_memset(&cmd, 0, sizeof(t_cmd));
-	input = ft_split(sort_redirection(inputs), ' ');
-	if (!input)
-	{
-		free(input);
-		input = NULL;
-		error_msg("malloc failed", 0);
-		return ;
-	}
-	i = -1;
-	while (input[++i])
-		ft_lstadd_back(&cmd.lst, ft_lstnew(ft_strdup(input[i])));
-	ft_free(input);
-	if (handle_redirection(&cmd, cmd.lst) == FALSE)
-	{
-		ft_lstclear(&cmd.lst, free);
-		return ;
-	}
-	debug(cmd.lst);
-	ft_lstclear(&cmd.lst, free);
+
 }
 
 void	parse_input(char *line)
 {
-	char	**inputs;
-	int		i;
+	t_list	*pipe;
 
-	inputs = ft_split(line, '|');
-	i = -1;
-	while (inputs[++i])
-		handle_pipe(inputs[i]);
-	ft_free(inputs);
+	pipe = NULL;
+	if (parse_pipe(line, &pipe) == TRUE)
+	{
+		if (check_pipe(pipe) == TRUE)
+		{
+			while (pipe)
+			{
+				handle_pipe(pipe->content);
+				pipe = pipe->next;
+			}
+		}
+	}
+	debug(pipe, "pipe");
+	ft_lstclear(&pipe, free);
 }
 
 void	get_input(void)
@@ -107,11 +103,9 @@ void	get_input(void)
 	char	*line;
 
 	line = readline("$ ");
-	//line = "<<<ls>>ls";
 	if (line)
 	{
 		parse_input(line);
-		//system("leaks minishell");
 	}
 	free(line);
 	line = NULL;
