@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2021/12/10 11:49:14 by jaehpark         ###   ########.fr        #
+#    Updated: 2021/12/12 11:06:27 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,7 @@ SRCS_DIR		= srcs
 SRCS_NAME		= minishell.c \
 					utils.c \
 					parse_utils.c \
-					pipe.c \
-					redirection.c
+					parse.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 

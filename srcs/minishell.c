@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:19:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/10 12:02:18 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/12 11:52:17 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,83 +19,64 @@ void	debug(t_list *lst, char *name)
 	i = 0;
 	while (lst)
 	{
-		printf("%s [%d] : %s!\n", name, i, (char *)lst->content);
+		printf("%s [%d] : %s\n", name, i, (char *)lst->content);
 		lst = lst->next;
 		i++;
 	}
 }
 
-int	parse_pipe(char *line, t_list **pipe)
+int	check_redirection(t_list *temp, t_cmd *cmd, t_list **lst)
 {
-	char	*save;
-	char	*temp;
-	int		i;
-
-	save = line;
-	i = -1;
-	while (line[++i])
+	while (temp)
 	{
-		if (parse_quotation_mark(line, &i) == FALSE)
-			return (FALSE);
-		if (line[i] == '|')
+		cmd->limiter = 0;
+		ft_lstlast(*lst);
+		temp = temp->next;
+	}
+	return (TRUE);
+}
+
+void	handle_pipe(char *input)
+{
+	t_list	*temp;
+	t_cmd	cmd;
+	char	*save;
+
+	temp = NULL;
+	ft_memset(&cmd, 0, sizeof(t_cmd));
+	save = input;
+	if (parse_redirection(input, &temp) == TRUE)
+	{
+		if (check_redirection(temp, &cmd, &cmd.lst) == TRUE)
 		{
-			temp = ft_strndup(line, i);
-			if (temp == NULL)
-				return (error_msg("malloc", 0));
-			ft_lstadd_back(pipe, ft_lstnew(temp));
-			line = &line[i + 1];
-			if (!line[0])
-				break ;
-			i = -1;
+
 		}
 	}
-	ft_lstadd_back(pipe, ft_lstnew(ft_strdup(line)));
-	line = save;
-	return (TRUE);
-}
-
-int	check_pipe(t_list *pipe)
-{
-	char	*temp;
-
-	while (pipe)
-	{
-		temp = pipe->content;
-		pipe->content = ft_strtrim(temp, " ");
-		free(temp);
-		temp = NULL;
-		if (pipe->content[0] == '\0')
-			return (error_msg(0, "|"));
-		pipe = pipe->next;
-	}
-	return (TRUE);
-}
-
-void	handle_pipe(char *pipe)
-{
-	t_cmd	cmd;
-
-
+	input = save;
+	debug(temp, "cmd");
 }
 
 void	parse_input(char *line)
 {
-	t_list	*pipe;
+	t_list	*input;
+	t_list	*head;
 
-	pipe = NULL;
-	if (parse_pipe(line, &pipe) == TRUE)
+	input = NULL;
+	if (parse_pipe(line, &input) == TRUE)
 	{
-		if (check_pipe(pipe) == TRUE)
+		head = input;
+		if (check_pipe(input) == TRUE)
 		{
-			while (pipe)
+			while (input)
 			{
-				handle_pipe(pipe->content);
-				pipe = pipe->next;
+				handle_pipe(input->content);
+				input = input->next;
 			}
 		}
+		input = head;
 	}
-	debug(pipe, "pipe");
-	ft_lstclear(&pipe, free);
+	//debug(input, "pipe");
+	ft_lstclear(&input, free);
 }
 
 void	get_input(void)
