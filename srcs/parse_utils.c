@@ -6,33 +6,49 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 11:48:15 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/11 09:08:26 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/13 19:57:16 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parse_special_mark(char *input, int *i)
+int	check_special_mark(char *line, int *i)
 {
-	if (input[*i] == '\"')
+	if (line[*i] == '\"')
 	{
 		(*i)++;
-		while (input[*i] && input[*i] != '\"')
+		while (line[*i] && line[*i] != '\"')
 			(*i)++;
-		if (!input[*i])
+		if (!line[*i])
 			return (error_msg(0, "\""));
 	}
-	else if (input[*i] == '\'')
+	else if (line[*i] == '\'')
 	{
 		(*i)++;
-		while (input[*i] && input[*i] != '\'')
+		while (line[*i] && line[*i] != '\'')
 			(*i)++;
-		if (!input[*i])
+		if (!line[*i])
 			return (error_msg(0, "\'"));
 	}
-	else if (input[*i] == ';')
+	else if (line[*i] == ';')
 		return (error_msg(0, ";"));
-	else if (input[*i] == '\\')
+	else if (line[*i] == '\\')
 		return (error_msg(0, "\\"));
 	return (TRUE);
+}
+
+void	skip_quotation_mark(char *line, int *i)
+{
+	if (line[*i] == '\"')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\"')
+			(*i)++;
+	}
+	else if (line[*i] == '\'')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\'')
+			(*i)++;
+	}
 }

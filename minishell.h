@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/12 11:40:46 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/13 19:57:23 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ typedef struct s_set
 	int				org_stdout;
 }					t_set;
 
-typedef struct s_cmd
+typedef struct s_info
 {
-	t_list	*lst;
+	t_list	*cmd;
 	char	*limiter;
 	int		outfile;
-}					t_cmd;
+}					t_info;
 
 
 int		error_msg(char *msg, char *type);
@@ -47,9 +47,12 @@ void	ft_free(char **ptr);
 void	init_set(t_set *set);
 void	reset_set(t_set *set);
 char	*ft_strndup(char *s, int n);
-int		parse_special_mark(char *input, int *i);
-int		parse_pipe(char *line, t_list **input);
-int		check_pipe(t_list *input);
-int		parse_redirection(char *input, t_list **temp);
+int		check_special_mark(char *line, int *i);
+void	skip_quotation_mark(char *line, int *i);
+int		parse_pipe(char *line, t_list **pipe);
+int		check_pipe(t_list *pipe);
+int		parse_redirection(char *pipe, t_list **input);
+int		check_redirection(t_list *input);
+int		handle_redirection(t_list *input, t_info *info, t_list **cmd);
 
 #endif

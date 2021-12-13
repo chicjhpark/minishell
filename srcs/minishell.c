@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:19:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/12 11:52:17 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/13 16:40:22 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,64 +19,52 @@ void	debug(t_list *lst, char *name)
 	i = 0;
 	while (lst)
 	{
-		printf("%s [%d] : %s\n", name, i, (char *)lst->content);
+		printf("%s [%d] : %s.\n", name, i, (char *)lst->content);
 		lst = lst->next;
 		i++;
 	}
 }
 
-int	check_redirection(t_list *temp, t_cmd *cmd, t_list **lst)
+void	handle_pipe(char *pipe)
 {
-	while (temp)
-	{
-		cmd->limiter = 0;
-		ft_lstlast(*lst);
-		temp = temp->next;
-	}
-	return (TRUE);
-}
-
-void	handle_pipe(char *input)
-{
-	t_list	*temp;
-	t_cmd	cmd;
+	t_list	*input;
+	t_info	info;
 	char	*save;
 
-	temp = NULL;
-	ft_memset(&cmd, 0, sizeof(t_cmd));
-	save = input;
-	if (parse_redirection(input, &temp) == TRUE)
-	{
-		if (check_redirection(temp, &cmd, &cmd.lst) == TRUE)
+	input = NULL;
+	ft_memset(&info, 0, sizeof(t_info));
+	save = pipe;
+	if (parse_redirection(pipe, &input) == TRUE)
+		if (check_redirection(input) == TRUE)
 		{
-
+			if (handle_redirection(input, &info, &info.cmd) == TRUE)
+			{}
 		}
-	}
-	input = save;
-	debug(temp, "cmd");
+	pipe = save;
+	debug(input, "input");
+	//debug(info.cmd, "cmd");
+	ft_lstclear(&input, free);
 }
 
 void	parse_input(char *line)
 {
-	t_list	*input;
+	t_list	*pipe;
 	t_list	*head;
 
-	input = NULL;
-	if (parse_pipe(line, &input) == TRUE)
+	pipe = NULL;
+	if (parse_pipe(line, &pipe) == TRUE)
 	{
-		head = input;
-		if (check_pipe(input) == TRUE)
-		{
-			while (input)
+		head = pipe;
+		if (check_pipe(pipe) == TRUE)
+			while (pipe)
 			{
-				handle_pipe(input->content);
-				input = input->next;
+				handle_pipe(pipe->content);
+				pipe = pipe->next;
 			}
-		}
-		input = head;
+		pipe = head;
 	}
 	//debug(input, "pipe");
-	ft_lstclear(&input, free);
+	ft_lstclear(&pipe, free);
 }
 
 void	get_input(void)
