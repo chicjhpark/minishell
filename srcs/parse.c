@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 11:06:39 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/13 21:52:20 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/14 03:58:22 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	check_pipe(t_list *pipe)
 	{
 		temp = pipe->content;
 		pipe->content = ft_strtrim(temp, " ");
+		if (pipe->content == NULL)
+			return (error_msg("malloc", 0));
 		free(temp);
 		temp = NULL;
 		if (pipe->content[0] == '\0')
@@ -54,21 +56,7 @@ int	check_pipe(t_list *pipe)
 	return (TRUE);
 }
 
-void	skip_space(char **pipe, int *i, t_list **input)
-{
-	if ((*pipe)[*i] == ' ')
-	{
-		if (*i != 0)
-			ft_lstadd_back(input, ft_lstnew(ft_strndup(*pipe, *i)));
-		while ((*pipe)[*i] && (*pipe)[*i] == ' ')
-			(*i)++;
-		(*pipe) = &(*pipe)[*i];
-		*i = 0;
-	}
-	skip_quotation_mark(*pipe, i);
-}
-
-int	parse_redirection(char *pipe, t_list **input)
+int	parse_token(char *pipe, t_list **input)
 {
 	int	i;
 
@@ -123,7 +111,7 @@ int	check_redirection(t_list *input)
 	return (TRUE);
 }
 
-int	handle_redirection(t_list *input, t_info *info, t_list **cmd)
+int	parse_redirection(t_list *input, t_info *info, t_list **cmd)
 {
 	int	infile;
 
@@ -135,11 +123,11 @@ int	handle_redirection(t_list *input, t_info *info, t_list **cmd)
 			if (ft_strncmp("<<", input->content, 3) == 0)
 				info->limiter = input->next->content;
 			else if (ft_strncmp("<", input->content, 2) == 0)
-				infile = open(input->next->content, O_RDONLY);
+				ft_lstadd_back(&info->infile, ft_lstnew(input->next->content));
 			else if (ft_strncmp(">>", input->content, 3) == 0)
-				info->outfile = open(input->next->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				ft_lstadd_back(&info->outfile_add, ft_lstnew(input->next->content));
 			else if (ft_strncmp(">", input->content, 2) == 0)
-				info->outfile = open(input->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				ft_lstadd_back(&info->outfile, ft_lstnew(input->next->content));
 			input = input->next;
 		}
 		else
