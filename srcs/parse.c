@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 11:06:39 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/14 03:58:22 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/15 06:07:55 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,17 +121,17 @@ int	parse_redirection(t_list *input, t_info *info, t_list **cmd)
 		if (input->content[0] == '<' || input->content[0] == '>')
 		{
 			if (ft_strncmp("<<", input->content, 3) == 0)
-				info->limiter = input->next->content;
+				info->limiter = delete_quot(input->next->content);
 			else if (ft_strncmp("<", input->content, 2) == 0)
-				ft_lstadd_back(&info->infile, ft_lstnew(input->next->content));
+				ft_lstadd_back(&info->infile, ft_lstnew(delete_quot(input->next->content)));
 			else if (ft_strncmp(">>", input->content, 3) == 0)
-				ft_lstadd_back(&info->outfile_add, ft_lstnew(input->next->content));
+				ft_lstadd_back(&info->outfile_add, ft_lstnew(delete_quot(input->next->content)));
 			else if (ft_strncmp(">", input->content, 2) == 0)
-				ft_lstadd_back(&info->outfile, ft_lstnew(input->next->content));
+				ft_lstadd_back(&info->outfile, ft_lstnew(delete_quot(input->next->content)));
 			input = input->next;
 		}
 		else
-			ft_lstadd_back(cmd, ft_lstnew(input->content));
+			ft_lstadd_back(cmd, ft_lstnew(delete_quot(input->content)));
 		if (infile < 0 || info->outfile < 0)
 			error_msg("open", 0);
 		if (input)

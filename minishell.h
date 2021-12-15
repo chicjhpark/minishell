@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/14 01:07:30 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/15 14:20:52 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct s_info
 	t_list	*outfile_add;
 	t_list	*outfile;
 	char	*limiter;
-	int		outfile_fd;
-	int		last_proc;
+	int		fd_outfile;
+	int		last_pipe;
 }					t_info;
 
 
@@ -59,5 +59,8 @@ int		check_pipe(t_list *pipe);
 int		parse_token(char *pipe, t_list **input);
 int		check_redirection(t_list *input);
 int		parse_redirection(t_list *input, t_info *info, t_list **cmd);
+char	*delete_quot(char *s);
+int		get_next_line(char **line);
+char	*sum(char *line, char buf);
 
 #endif
