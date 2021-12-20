@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/15 14:20:52 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/20 20:34:16 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,17 @@
 # include <termios.h>
 # include <curses.h>
 
+# define ERROR		-1
+
 typedef struct s_set
 {
 	struct termios	org_term;
 	struct termios	new_term;
 	int				org_stdin;
 	int				org_stdout;
-}					t_set;
+}t_set;
 
-typedef struct s_info
+typedef struct s_data
 {
 	t_list	*cmd;
 	t_list	*infile;
@@ -42,25 +44,23 @@ typedef struct s_info
 	t_list	*outfile;
 	char	*limiter;
 	int		fd_outfile;
-	int		last_pipe;
-}					t_info;
+}t_data;
 
+int		error_msg(char *msg);
+void	ft_free(char *p);
+char	*ft_strntrim(char *s, char *set, int n);
 
-int		error_msg(char *msg, char *type);
-void	ft_free(char **ptr);
 void	init_set(t_set *set);
 void	reset_set(t_set *set);
-char	*ft_strndup(char *s, int n);
-int		check_special_mark(char *line, int *i);
-void	skip_quotation_mark(char *line, int *i);
-void	skip_space(char **pipe, int *i, t_list **input);
-int		parse_pipe(char *line, t_list **pipe);
-int		check_pipe(t_list *pipe);
-int		parse_token(char *pipe, t_list **input);
-int		check_redirection(t_list *input);
-int		parse_redirection(t_list *input, t_info *info, t_list **cmd);
-char	*delete_quot(char *s);
-int		get_next_line(char **line);
-char	*sum(char *line, char buf);
+
+int		split_token(char *input, t_list **token);
+int		split_rest_token(char *input, t_list **token);
+int		split_pipe_token(char *input, int i, t_list **token);
+int		split_space_token(char *input, int i, t_list **token);
+int		split_redirection_token(char *input, int i, t_list **token);
+
+int		find_valid_quot_point(char *line, int start);
+
+
 
 #endif

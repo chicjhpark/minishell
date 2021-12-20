@@ -6,67 +6,43 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/11 08:09:18 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/20 16:09:42 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		error_msg(char *msg, char *type)
+int	error_msg(char *msg)
 {
-	if (!type)
+	if (msg[0] == 0)
+		printf("bash: syntax error near unexpected token 'newline'\n");
+	else if (msg[0] == '|' || msg[0] == '<' || msg[0] == '>')
+		printf("bash: syntax error near unexpected token '%s'\n", msg);
+	else
 		printf("bash: %s: %s\n", msg, strerror(errno));
-	else if (!msg)
-		printf("bash : syntax error near unexpected token '%s'\n", type);
-	return (FALSE);
+	return (ERROR);
 }
 
-char	*ft_strndup(char *s, int n)
+void	ft_free(char *p)
 {
-	char	*s2;
+	free(p);
+	p = NULL;
+}
+
+char	*ft_strntrim(char *s, char *set, int n)
+{
+	char	*temp;
+	char	*temp2;
 	int		i;
 
-	s2 = (char *)malloc(sizeof(char) * (n + 1));
-	if (s2 == NULL)
+	temp = (char *)malloc(sizeof(char) * (n + 1));
+	if (!temp)
 		return (NULL);
 	i = -1;
 	while (s[++i] && i < n)
-		s2[i] = s[i];
-	s2[i] = '\0';
-	return (s2);
-}
-
-void	ft_free(char **ptr)
-{
-	int	i;
-
-	i = -1;
-	while (ptr[++i])
-	{
-		free(ptr[i]);
-		ptr[i] = NULL;
-	}
-	free(ptr[i]);
-	free(ptr);
-	ptr = NULL;
-}
-
-void	init_set(t_set *set)
-{
-	ft_memset(set, 0, sizeof(t_set));
-	set->org_stdin = dup(STDIN_FILENO);
-	set->org_stdout = dup(STDOUT_FILENO);
-	tcgetattr(STDIN_FILENO, &set->org_term);
-	tcgetattr(STDIN_FILENO, &set->new_term);
-	set->new_term.c_lflag &= ~(ICANON | ECHO);
-	set->new_term.c_cc[VMIN] = 1;
-	set->new_term.c_cc[VTIME] = 0;
-	tcsetattr(0, TCSANOW, &set->new_term);
-}
-
-void	reset_set(t_set *set)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);
-	dup2(set->org_stdin, STDIN_FILENO);
-	//close(set->org_stdin);
+		temp[i] = s[i];
+	temp[i] = 0;
+	temp2 = ft_strtrim(temp, set);
+	ft_free(temp);
+	return (temp2);
 }

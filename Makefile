@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2021/12/14 01:05:19 by jaehpark         ###   ########.fr        #
+#    Updated: 2021/12/20 20:31:51 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,12 @@ CPPFLAGS		="-I/Users/$(USER)/.brew/opt/readline/include"
 INCS			= -Ilibft -I.
 
 SRCS_DIR		= srcs
-SRCS_NAME		= minishell.c \
+SRCS_NAME		= main.c \
+					setting.c \
 					utils.c \
-					parse_utils.c \
 					parse.c \
-					handle.c
+					parse_utils.c \
+					split_token.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 

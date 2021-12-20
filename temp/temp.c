@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   temp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 15:19:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/15 15:33:52 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/15 16:18:36 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,62 @@ void	debug(t_list *lst, char *name)
 		i++;
 	}
 }
+
+int	check_special_mark(char *line, int *i)
+{
+	if (line[*i] == '\"')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\"')
+			(*i)++;
+		if (!line[*i])
+			return (error_msg(0, "\""));
+	}
+	else if (line[*i] == '\'')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\'')
+			(*i)++;
+		if (!line[*i])
+			return (error_msg(0, "\'"));
+	}
+	else if (line[*i] == ';')
+		return (error_msg(0, ";"));
+	else if (line[*i] == '\\')
+		return (error_msg(0, "\\"));
+	return (TRUE);
+}
+
+void	skip_quotation_mark(char *line, int *i)
+{
+	if (line[*i] == '\"')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\"')
+			(*i)++;
+	}
+	else if (line[*i] == '\'')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\'')
+			(*i)++;
+	}
+}
+
+void	skip_space(char **pipe, int *i, t_list **input)
+{
+	if ((*pipe)[*i] == ' ')
+	{
+		if (*i != 0)
+			ft_lstadd_back(input, ft_lstnew(ft_strndup(*pipe, *i)));
+		while ((*pipe)[*i] && (*pipe)[*i] == ' ')
+			(*i)++;
+		(*pipe) = &(*pipe)[*i];
+		*i = 0;
+	}
+	skip_quotation_mark(*pipe, i);
+}
+
 
 int	parse_pipe(char *line, t_list **pipe)
 {
