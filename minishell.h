@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/20 20:34:16 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/22 17:11:48 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,21 @@ typedef struct s_set
 	int				org_stdout;
 }t_set;
 
-typedef struct s_data
+typedef struct s_proc
 {
+	t_list	*data;
 	t_list	*cmd;
 	t_list	*infile;
 	t_list	*outfile_add;
 	t_list	*outfile;
-	char	*limiter;
+	t_list	*limiter;
 	int		fd_outfile;
-}t_data;
+}t_proc;
 
 int		error_msg(char *msg);
 void	ft_free(char *p);
 char	*ft_strntrim(char *s, char *set, int n);
+char	*ft_strndup(char *s, int n);
 
 void	init_set(t_set *set);
 void	reset_set(t_set *set);
@@ -61,6 +63,6 @@ int		split_redirection_token(char *input, int i, t_list **token);
 
 int		find_valid_quot_point(char *line, int start);
 
-
+int		check_token(t_list *token);
 
 #endif

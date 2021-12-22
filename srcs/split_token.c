@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 20:30:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/20 20:32:30 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/20 21:36:06 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	split_rest_token(char *input, t_list **token)
 
 	if (input[0])
 	{
-		temp = ft_strdup(input);
+		temp = ft_strntrim(input, " ", ft_strlen(input));
 		if (!temp)
 			return (error_msg("malloc"));
 		ft_lstadd_back(token, ft_lstnew(temp));
