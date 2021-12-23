@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/22 17:23:28 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/24 02:45:46 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,36 @@ int	find_env_var_point(char *line)
 	return (find);
 }
 
+char	*expand_env_var(char *data, int i)
+{
+	char	*temp;
+	char	*pre_env_var;
+	char	*get_env_var;
+	char	*merge_env_var;
+	char	*new_data;
+
+	temp = ft_strndup(data, i);
+	if (!temp)
+		return (NULL);
+	data = &data[i + 1];
+	i = find_env_var_point(data);
+	pre_env_var = ft_strndup(data, i);
+	if (!pre_env_var)
+		return (NULL);
+	data = &data[i];
+	get_env_var = getenv(pre_env_var);
+	ft_free(pre_env_var);
+	merge_env_var = ft_strjoin(temp, get_env_var);
+	if (!merge_env_var)
+		return (NULL);
+	ft_free(temp);
+	new_data = ft_strjoin(merge_env_var, data);
+	return (new_data);
+}
+
 int	handle_env_var(t_list *data)
 {
 	char	*save;
-	char	*temp1;
-	char	*temp2;
-	char	*temp3;
-	char	*env_var;
 	int		i;
 
 	while (data)
@@ -54,36 +77,14 @@ int	handle_env_var(t_list *data)
 			if (data->content[i] == '$')
 			{
 				save = data->content;
-				temp1 = ft_strndup(data->content, i);
-				if (!temp1)
-					return (error_msg("malloc"));
-				data->content = &data->content[i + 1];
-				i = find_env_var_point(data->content);
-				temp2 = ft_strndup(data->content, i);
-				if (!temp2)
-				{
-					ft_free(temp1);
-					return (error_msg("malloc"));
-				}
-				data->content = &data->content[i];
-				i = -1;
-				env_var = getenv(temp2);
-				ft_free(temp2);
-				if (!env_var)
-					temp3 = ft_strdup(temp1);
-				else
-				{
-					temp3 = ft_strjoin(temp1, env_var);
-					ft_free(env_var);
-				}
-				ft_free(temp1);
-				if (!temp3)
-					return (error_msg("malloc"));
-				data->content = ft_strjoin(temp3, data->content);
-				ft_free(temp3);
+				data->content = expand_env_var(data->content, i);
 				if (!data->content)
+				{
+					data->content = save;
 					return (error_msg("malloc"));
+				}
 				ft_free(save);
+				i = -1;
 			}
 		}
 		data = data->next;
@@ -91,7 +92,7 @@ int	handle_env_var(t_list *data)
 	return (TRUE);
 }
 
-int	parse_proc(t_proc *proc)
+int	handle_proc(t_proc *proc)
 {
 	if (handle_env_var(proc->data) == TRUE)
 	{
@@ -101,7 +102,7 @@ int	parse_proc(t_proc *proc)
 	return (TRUE);
 }
 
-int	handle_proc(t_list *token)
+int	parse_proc(t_list *token)
 {
 	t_proc	proc;
 	char	*temp;
@@ -119,7 +120,7 @@ int	handle_proc(t_list *token)
 		}
 		if (!token->next || token->content[0] == '|')
 		{
-			parse_proc(&proc);
+			handle_proc(&proc);
 			ft_memset(&proc, 0, sizeof(t_proc));
 		}
 		token = token->next;
@@ -138,7 +139,7 @@ void	get_input(void)
 	{
 		if (split_token(input, &token) == TRUE)
 			if (check_token(token) == TRUE)
-				if (handle_proc(token) == TRUE)
+				if (parse_proc(token) == TRUE)
 				{}
 	}
 	//debug(token, "token");

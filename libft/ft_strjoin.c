@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 13:00:42 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/22 17:18:29 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/24 02:40:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		l2;
 
 	if (!s1)
-		return (NULL);
-	l1 = ft_strlen(s1);
-	l2 = ft_strlen(s2);
-	s3 = (char *)malloc(sizeof(char) * (l1 + l2 + 1));
+		return ((char *)s2);
+	else if (!s2)
+		return ((char *)s1);
+	s3 = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!s3)
 		return (NULL);
 	l1 = 0;
