@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/22 15:52:27 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/25 23:11:21 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ int	error_msg(char *msg)
 	return (ERROR);
 }
 
-void	ft_free(char *p)
+void	*ft_free(char *p)
 {
-	free(p);
-	p = NULL;
+	if (p)
+	{
+		free(p);
+		p = NULL;
+	}
+	return (NULL);
 }
 
 char	*ft_strntrim(char *s, char *set, int n)

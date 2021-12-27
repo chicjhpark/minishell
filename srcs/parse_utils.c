@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:57:31 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/20 16:19:45 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/26 15:34:53 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,14 @@ int	find_valid_quot_point(char *line, int start)
 	if (line[find])
 		return (find);
 	return (start);
+}
+
+int	find_env_var_point(char *line)
+{
+	int	find;
+
+	find = 0;
+	while (line[find] && (line[find] == '_' || ft_isalnum(line[find])))
+		find++;
+	return (find);
 }

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/22 17:11:48 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/27 18:04:57 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,12 @@ typedef struct s_proc
 {
 	t_list	*data;
 	t_list	*cmd;
-	t_list	*infile;
-	t_list	*outfile_add;
-	t_list	*outfile;
 	t_list	*limiter;
-	int		fd_outfile;
+	int		outfile;
 }t_proc;
 
 int		error_msg(char *msg);
-void	ft_free(char *p);
+void	*ft_free(char *p);
 char	*ft_strntrim(char *s, char *set, int n);
 char	*ft_strndup(char *s, int n);
 
@@ -62,7 +59,14 @@ int		split_space_token(char *input, int i, t_list **token);
 int		split_redirection_token(char *input, int i, t_list **token);
 
 int		find_valid_quot_point(char *line, int start);
+int		find_env_var_point(char *line);
 
 int		check_token(t_list *token);
+int		handle_env_var(char *input);
+char	*expand_env_var(char *data, int i);
+int		make_process(t_list *token);
+int		split_process(t_list *token);
+
+
 
 #endif
