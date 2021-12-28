@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/27 18:05:07 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/28 09:15:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,77 +25,74 @@ void	debug(t_list *lst, char *name)
 	}
 }
 
-char	*del_quot_token(char *data) // malloc -> copy
+char	*del_quot_token(char *data, int i)
 {
 	char	*temp;
-	int		i;
+	int		quot1;
+	int		quot2;
 	int		j;
 
-	temp = (char *)malloc(sizeof(char) * (ft_strlen(data) + 1));
+	temp = (char *)malloc(sizeof(char) * ft_strlen(data) + 1);
+	if (!temp)
+		return (NULL);
+	quot1 = i;
+	quot2 = find_valid_quot_point(data, i);
 	i = -1;
 	j = 0;
 	while (data[++i])
-	{
-		if (data[i] == '\"' || data[i] == '\'')
-			if (i != find_valid_quot_point(data, i))
-				i++;
-		temp[j++] = data[i];
-		if (!data[i])
-			return (temp);
-	}
-	temp[j] = 0;
+		if (i != quot1 && i != quot2)
+			temp[j++] = data[i];
+	temp[j] = '\0';
 	return (temp);
 }
 
-/*int	handle_redirection(t_proc *proc, t_list *data)
+char	*expand_data(char *data)
 {
 	char	*temp;
-	int		infile;
+	int		i;
 
-	while (data)
+	temp = ft_strdup(data);
+	if (!temp)
+		return (NULL);
+	i = -1;
+	while (data[++i])
 	{
-		if (data->content[0] == '<' || data->content[0] == '>')
+		if (data[i] == '\'')
+			i = find_valid_quot_point(data, i);
+		if (data[i] == '\"')
 		{
-			temp = NULL;
-			temp = expand_data(data->next->content);
+			if (i != find_valid_quot_point(data, i))
+			{
+				temp = del_quot_token(data, i);
+				if (!temp)
+					return (NULL);
+				data = expand_env_var(temp, i);
+				printf("temp : %s\n", temp);
+				ft_free(temp);
+				temp = data;
+				if (!data)
+					return (NULL);
+				i = -1;
+			}
+		}
+		else if (data[i] == '$')
+		{
+			temp = expand_env_var(data, i);
 			if (!temp)
-				return (error_msg("malloc"));
-			if (ft_strncmp(data->content, "<<", 3) == 0)
-				ft_lstadd_back(&proc->limiter, ft_lstnew(temp));
-			else if (ft_strncmp(data->content, "<", 2) == 0)
-			{
-				infile = open(temp, O_RDONLY);
-				if (infile < 0)
-					return (error_msg(temp));
-				dup2(infile, STDIN_FILENO);
-				data = data->next;
-			}
-			else if (data->content[0] == '>')
-			{
-				if (data->content[1] == '>')
-					proc->outfile = open(temp, O_WRONLY | O_CREAT | O_APPEND, 0644);
-				else
-					proc->outfile = open(temp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (proc->outfile < 0)
-					return (error_msg(temp));
-			}
+				return (NULL);
+			i = -1;
 		}
-		else
-		{
-			data = data->next;
-			continue ;
-		}
-		data = data->next->next;
 	}
-	return (TRUE);
-}*/
+	return (temp);
+}
 
-int	handle_proc(t_proc *proc)
+int	parse_data(t_proc *proc)
 {
-	if (handle_redirection(proc, proc->data) == TRUE)
+	if (handle_data(proc, proc->data) == TRUE)
 	{
 	}
-	debug(proc->data, "data");
+	debug(proc->cmd, "cmd");
+	//debug(proc->data, "data");
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);
@@ -112,9 +109,8 @@ void	get_input(void)
 	if (input)
 	{
 		if (split_token(input, &token) && check_token(token))
-			split_process(token);
+			parse_process(token);
 	}
-	//debug(token, "token");
 	ft_free(input);
 	ft_lstclear(&token, free);
 }

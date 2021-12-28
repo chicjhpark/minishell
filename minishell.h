@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/27 18:04:57 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/28 09:12:10 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,18 @@ int		split_redirection_token(char *input, int i, t_list **token);
 
 int		find_valid_quot_point(char *line, int start);
 int		find_env_var_point(char *line);
-
 int		check_token(t_list *token);
-int		handle_env_var(char *input);
-char	*expand_env_var(char *data, int i);
-int		make_process(t_list *token);
-int		split_process(t_list *token);
 
+char	*expand_env_var(char *data, int i);
+
+char	*expand_data(char *data);
+
+int		make_process(t_list *token);
+int		parse_process(t_list *token);
+int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
+int		handle_data(t_proc *proc, t_list *data);
+
+int		parse_data(t_proc *proc);
 
 
 #endif

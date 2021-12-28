@@ -6,93 +6,11 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/27 18:04:51 by jaehpark         ###   ########.fr       */
+/*   Updated: 2021/12/28 09:01:32 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	check_token(t_list *token)
-{
-	int	i;
-
-	i = 0;
-	while (token)
-	{
-		if (token->content[0] == '|' && (i == 0 ||
-			!token->next || token->next->content[0] == '|'))
-			return (error_msg("|"));
-		else if (token->content[0] == '<' || token->content[0] == '>')
-		{
-			if (token->content[1] && token->content[0] != token->content[1])
-				return (error_msg(&token->content[1]));
-			else if (ft_strlen(token->content) > 2)
-				return (error_msg(&token->content[2]));
-			else if (!token->next)
-				return (error_msg(NULL));
-			else if (token->next->content[0] == '<' || token->next->content[0] == '>'
-					|| token->next->content[0] == '|')
-				return (error_msg(token->next->content));
-		}
-		i++;
-		token = token->next;
-	}
-	return (TRUE);
-}
-
-char	*expand_env_var(char *data, int i)
-{
-	char	*temp;
-	char	*pre_env_var;
-	char	*get_env_var;
-	char	*merge_env_var;
-	char	*new_data;
-
-	temp = ft_strndup(data, i);
-	if (!temp)
-		return (NULL);
-	data = &data[i + 1];
-	i = find_env_var_point(data);
-	pre_env_var = ft_strndup(data, i);
-	if (!pre_env_var)
-		return (ft_free(temp));
-	data = &data[i];
-	get_env_var = getenv(pre_env_var);
-	ft_free(pre_env_var);
-	merge_env_var = ft_strjoin(temp, get_env_var);
-	ft_free(temp);
-	if (!merge_env_var)
-		return (NULL);
-	new_data = ft_strjoin(merge_env_var, data);
-	ft_free(merge_env_var);
-	return (new_data);
-}
-
-int	handle_env_var(char *input)
-{
-	char	*save;
-	int		i;
-
-		i = -1;
-	while (input[++i])
-	{
-		if (input[i] == '\'')
-			i = find_valid_quot_point(input, i);
-		if (input[i] == '$')
-		{
-			save = input;
-			input = expand_env_var(input, i);
-			if (!input)
-			{
-				input = save;
-				return (error_msg("malloc"));
-			}
-			ft_free(save);
-			i = -1;
-		}
-	}
-	return (TRUE);
-}
 
 int	make_process(t_list *token)
 {
@@ -106,7 +24,7 @@ int	make_process(t_list *token)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
-		split_process(token);
+		parse_process(token);
 	}
 	else if (pid > 0)
 	{
@@ -123,7 +41,7 @@ int	make_process(t_list *token)
 	return (TRUE);
 }
 
-int	split_process(t_list *token)
+int	parse_process(t_list *token)
 {
 	char	*temp;
 	t_proc	proc;
@@ -141,10 +59,65 @@ int	split_process(t_list *token)
 		}
 		if (!token->next || token->content[0] == '|')
 		{
-			handle_proc(&proc);
+			parse_data(&proc);
 			ft_memset(&proc, 0, sizeof(t_proc));
 		}
 		token = token->next;
+	}
+	return (TRUE);
+}
+
+int	parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp)
+{
+	int	infile;
+
+	if (ft_strncmp(data->content, "<", 2) == 0)
+	{
+		infile = open(temp, O_RDONLY);
+		ft_free(temp);
+		if (infile < 0)
+			return (error_msg("temp"));
+		dup2(infile, STDIN_FILENO);
+	}
+	else if (data->content[0] == '>')
+	{
+		if (data->content[1] == '>')
+			proc->outfile = open(temp, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else if (!data->content[1])
+			proc->outfile = open(temp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		ft_free(temp);
+		if (proc->outfile < 0)
+			return (error_msg(temp));
+	}
+	return (TRUE);
+}
+
+int	handle_data(t_proc *proc, t_list *data)
+{
+	char	*temp;
+
+	temp = NULL;
+	while (data)
+	{
+		if (data->content[0] == '<' || data->content[0] == '>')
+		{
+			temp = expand_data(data->next->content);
+			if (!temp)
+				return (error_msg("malloc"));
+			if (ft_strncmp(data->content, "<<", 3) == 0)
+				ft_lstadd_back(&proc->limiter, ft_lstnew(temp));
+			else if (parse_std_inout_redirection(proc, data, temp) == ERROR)
+				return (ERROR);
+			data = data->next;
+		}
+		else
+		{
+			temp = expand_data(data->content);
+			if (!temp)
+				return (error_msg("malloc"));
+			ft_lstadd_back(&proc->cmd, ft_lstnew(temp));
+		}
+		data = data->next;
 	}
 	return (TRUE);
 }
