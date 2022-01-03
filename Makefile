@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2021/12/20 20:31:51 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/03 09:34:39 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ SRCS_NAME		= main.c \
 					utils.c \
 					parse.c \
 					parse_utils.c \
-					split_token.c
+					split_token.c \
+					expand.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 

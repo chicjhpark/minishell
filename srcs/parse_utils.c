@@ -6,32 +6,62 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:57:31 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/28 09:12:02 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/04 08:20:22 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	find_valid_quot_point(char *line, int start)
+char	*my_strtrim(char *data, int start, int end)
 {
-	int	find;
+	char	*temp;
+	int		i;
+	int		j;
 
-	find = start + 1;
-	while (line[find] && line[start] != line[find])
-		find++;
-	if (line[find])
-		return (find);
-	return (start);
+	temp = (char *)malloc(sizeof(char) * end);
+	if (!temp)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (data[++i] && i < end)
+		if (i != start)
+			temp[j++] = data[i];
+	temp[j] = 0;
+	return (temp);
 }
 
-int	find_env_var_point(char *line)
+int	find_valid_env_var_point(char *data)
 {
 	int	find;
 
 	find = 0;
-	while (line[find] && (line[find] == '_' || ft_isalnum(line[find])))
+	while (data[find] && (ft_isalnum(data[find]) || data[find] == '_'))
 		find++;
 	return (find);
+}
+
+int	find_env_var_token(char *data, int start, int end)
+{
+	int	find;
+
+	find = start + 1;
+	while (data[find] && find < end && data[find] != '$')
+		find++;
+	if (!find)
+		return (FALSE);
+	return (TRUE);
+}
+
+int	find_valid_quot_point(char *data, int start)
+{
+	int	find;
+
+	find = start + 1;
+	while (data[find] && data[start] != data[find])
+		find++;
+	if (data[find])
+		return (find);
+	return (start);
 }
 
 int	check_token(t_list *token)
@@ -60,32 +90,4 @@ int	check_token(t_list *token)
 		token = token->next;
 	}
 	return (TRUE);
-}
-
-char	*expand_env_var(char *data, int i)
-{
-	char	*temp;
-	char	*pre_env_var;
-	char	*get_env_var;
-	char	*merge_env_var;
-	char	*new_data;
-
-	temp = ft_strndup(data, i);
-	if (!temp)
-		return (NULL);
-	data = &data[i + 1];
-	i = find_env_var_point(data);
-	pre_env_var = ft_strndup(data, i);
-	if (!pre_env_var)
-		return (ft_free(temp));
-	data = &data[i];
-	get_env_var = getenv(pre_env_var);
-	ft_free(pre_env_var);
-	merge_env_var = ft_strjoin(temp, get_env_var);
-	ft_free(temp);
-	if (!merge_env_var)
-		return (NULL);
-	new_data = ft_strjoin(merge_env_var, data);
-	ft_free(merge_env_var);
-	return (new_data);
 }
