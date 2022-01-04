@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/04 08:47:24 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/04 09:42:02 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ char	*expand_data(char *data)
 			data = del_small_quot_token(data, i, &new_data);
 		else if (data[i] == '\"' && i != find_valid_quot_point(data, i))
 			data = del_big_quot_token(data, i, &new_data);
-		/*else if (data[i] == '$')
-			data = expand_env_var(data, i, &new_data);*/
+		else if (data[i] == '$')
+			data = expand_env_var(data, i, &new_data);
 		else
 			continue ;
 		if (!data)
