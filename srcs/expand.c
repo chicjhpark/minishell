@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/04 09:42:02 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/06 05:37:47 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ char	*expand_env_var(char *data, int start, char **new_data)
 	char	*temp;
 
 	org_data = *new_data;
-	temp = ft_strndup(data, start); // 환경 변수 전 문자열 저장
+	temp = ft_strndup(data, start); // 환경 변수 전의 문자열
 	if (!temp)
 		return (NULL);
-	*new_data = ft_strjoin(*new_data, temp); // 원본 문자열과 환경 변수 전 문자열 병합
+	*new_data = ft_strjoin(*new_data, temp);
 	ft_free(temp);
 	ft_free(org_data);
 	if (!(*new_data))
 		return (NULL);
-	data = &data[start + 1]; // 달러 사인 이후 문자열 인덱스
+	data = &data[start + 1];
 	get_env = ft_strndup(data, find_valid_env_var_point(data));
 	data = &data[find_valid_env_var_point(data)];
 	if (!get_env)
@@ -66,24 +66,24 @@ char	*expand_in_quot_env_var(char *data, int start, int end)
 	char	*temp;
 	int		i;
 
-	new_data = ft_strndup(data, start); // 쿼트 전 문자열 저장
+	new_data = ft_strndup(data, start);
 	if (!new_data)
 		return (NULL);
 	data = &data[start + 1];
-	data = ft_strndup(data, end - start - 1); // 쿼트 안쪽 문자열 한칸 증가 시켜서 인덱스를 저장 했기에 한칸 빼줌
+	data = ft_strndup(data, end - start - 1);
 	if (!data)
 		return (ft_free(new_data));
 	i = -1;
 	while (data[++i])
 		if (data[i] == '$')
 		{
-			data = expand_env_var(data, i, &new_data); // 환경 변수 확장
+			data = expand_env_var(data, i, &new_data);
 			if (!data)
 				return (ft_free(new_data));
 			i = -1;
 		}
 	temp = new_data;
-	new_data = ft_strjoin(new_data, data); // 확장된 문자열과 남은 문자열 병합
+	new_data = ft_strjoin(new_data, data);
 	ft_free(temp);
 	return (new_data);
 }

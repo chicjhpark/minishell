@@ -1,0 +1,91 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/06 08:14:17 by jaehpark          #+#    #+#             */
+/*   Updated: 2022/01/06 09:41:06 by jaehpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+char	*sum(char *line, char buf)
+{
+	int		size;
+	char	*str;
+	int		i;
+
+	size = ft_strlen(line);
+	str = (char *)malloc(sizeof(char) * (size + 2));
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (line[i] != 0)
+	{
+		str[i] = line[i];
+		i++;
+	}
+	free(line);
+	str[i++] = buf;
+	str[i] = '\0';
+	return (str);
+}
+
+int	get_next_line(char **line)
+{
+	char	buf;
+	int		ret;
+
+	*line = (char *)malloc(1);
+	if (*line == NULL)
+		return (-1);
+	(*line)[0] = 0;
+	ret = read(0, &buf, 1);
+	while (buf != '\n' && buf != '\0')
+	{
+		*line = sum(*line, buf);
+		if (*line == 0)
+			return (-1);
+		ret = read(0, &buf, 1);
+	}
+	if (buf == '\n')
+		return (1);
+	return (0);
+}
+
+void	print_line(char *line, char *limiter, int fd)
+{
+	if (ft_strncmp(line, limiter, ft_strlen(line)) == 0)
+		exit(0);
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n", 1);
+}
+
+int	heredoc(char *limiter)
+{
+	int		fd[2];
+	pid_t	pid;
+	char	*line;
+
+	if (pipe(fd) == -1)
+		return (error_msg("pipe"));
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		while (get_next_line(&line))
+			print_line(line, limiter, fd[1]);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, 0, WNOHANG);
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+	}
+	else
+		return (error_msg("fork"));
+	return (TRUE);
+}

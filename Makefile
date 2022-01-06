@@ -6,14 +6,14 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/03 09:34:39 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/06 14:13:27 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -g -g3 -fsanitize=address -Wall -Werror -Wextra
+CFLAGS			= -g -g3 -fsanitize=address -Wall -Wextra
 
 LDFLAGS			="-L/Users/$(USER)/.brew/opt/readline/lib"
 CPPFLAGS		="-I/Users/$(USER)/.brew/opt/readline/include"
@@ -27,7 +27,9 @@ SRCS_NAME		= main.c \
 					parse.c \
 					parse_utils.c \
 					split_token.c \
-					expand.c
+					expand.c \
+					command.c \
+					heredoc.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 
@@ -47,7 +49,7 @@ $(LIB)			:
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c
 					mkdir -p $(OBJS_DIR)
-					$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+					$(CC) $(CFLAGS) -lreadline $(LDFLAGS) $(CPPFLAGS) $(INCS) -c $< -o $@
 
 all				: $(NAME)
 

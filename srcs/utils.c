@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2021/12/25 23:11:21 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/06 11:24:11 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,28 @@
 
 int	error_msg(char *msg)
 {
+	write(2, "bash: ", 6);
 	if (!msg)
-		printf("bash: syntax error near unexpected token 'newline'\n");
+		write(2, "syntax error near unexpected token 'newline'", 44);
 	else if (msg[0] == '|' || msg[0] == '<' || msg[0] == '>')
-		printf("bash: syntax error near unexpected token '%s'\n", msg);
+	{
+		write(2, "syntax error near unexpected token ", 35);
+		write(2, "'", 1);
+		write(2, msg, ft_strlen(msg));
+		write(2, "'", 1);
+	}
 	else
-		printf("bash: %s: %s\n", msg, strerror(errno));
+	{
+		write(2, msg, ft_strlen(msg));
+		if (ft_strncmp(strerror(errno), "Bad address", 12) == 0)
+			write(2, ": command not found", 19);
+		else
+		{
+			write(2, ": ", 2);
+			write(2, strerror(errno), ft_strlen(strerror(errno)));
+		}
+	}
+	write(2, "\n", 1);
 	return (ERROR);
 }
 

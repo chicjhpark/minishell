@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/04 06:25:55 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/06 13:29:21 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 
 # define ERROR		-1
 
+char	**val_envp;
+
 typedef struct s_set
 {
 	struct termios	org_term;
@@ -41,6 +43,7 @@ typedef struct s_proc
 	t_list	*data;
 	t_list	*cmd;
 	t_list	*limiter;
+	int		infile;
 	int		outfile;
 }t_proc;
 
@@ -51,7 +54,7 @@ void	*ft_free(char *p);
 char	*ft_strntrim(char *s, char *set, int n);
 char	*ft_strndup(char *s, int n);
 
-void	init_set(t_set *set);
+void	init_set(t_set *set, char **envp);
 void	reset_set(t_set *set);
 
 int		split_token(char *input, t_list **token);
@@ -75,6 +78,9 @@ int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 char	*expand_data(char *data);
 char	*del_small_quot_token(char *data, int start, char **new_data);
 
+int		heredoc(char *limiter);
+int		handle_command(t_proc *proc, t_list *cmd);
+int		handle_last_command(t_proc *proc);
 
 
 
