@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 08:14:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 09:41:06 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 00:14:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	heredoc(char *limiter)
 	}
 	else if (pid > 0)
 	{
-		waitpid(pid, 0, WNOHANG);
+		waitpid(pid, 0, 0);
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 	}

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 13:20:42 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 01:47:49 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,17 @@ int	handle_command(t_proc *proc, t_list *cmd)
 		if (exe[0][0] == '/' || exe[0][0] == '.')
 			if (execve(exe[0], exe, val_envp) == -1)
 				return (error_msg(exe[0]));
+		close(fd[1]);
 		if (execve(find_path(exe[0]), exe, val_envp) == -1)
 			return (error_msg(exe[0]));
+		exit(0);
 	}
 	else if (pid > 0)
 	{
-		waitpid(pid, 0, WNOHANG);
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		//dup2(proc->outfile, STDOUT_FILENO);
+		waitpid(pid, 0, WNOHANG);
+		close(fd[0]);
 	}
 	else
 	{
@@ -107,18 +109,14 @@ int	handle_command(t_proc *proc, t_list *cmd)
 
 int	handle_last_command(t_proc *proc)
 {
-	int		fd[2];
 	pid_t	pid;
 	char	**exe;
 
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 	{
-		if (pipe(fd) == -1)
-			return (error_msg("pipe"));
 		pid = fork();
 		if (pid == 0)
 		{
-			close(fd[0]);
 			if (proc->outfile > 0)
 				dup2(proc->outfile, STDOUT_FILENO);
 			exe = split_command(proc->cmd);
@@ -135,14 +133,11 @@ int	handle_last_command(t_proc *proc)
 		else if (pid > 0)
 		{
 			waitpid(pid, 0, 0);
-			close(fd[1]);
 			//dup2(fd[0], STDOUT_FILENO);
 			//dup2(proc->outfile, STDOUT_FILENO);
 		}
 		else
 		{
-			close(fd[0]);
-			close(fd[1]);
 			return (error_msg("fork"));
 		}
 	}

@@ -6,25 +6,26 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 13:29:21 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/06 16:27:13 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <sys/wait.h>
+# include <stdio.h>
 # include <fcntl.h>
-# include <signal.h>
+# include <sys/wait.h>
 # include <sys/stat.h>
-# include <dirent.h>
 # include <sys/errno.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <dirent.h>
 # include <sys/ioctl.h>
-# include <termios.h>
 # include <curses.h>
+# include <termios.h>
+# include <signal.h>
+# include "libft.h"
 
 # define ERROR		-1
 
