@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 01:42:39 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 03:12:36 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	get_input(void)
 	t_list	*token;
 
 	input = readline("$ ");
-	//input = ft_strdup("ls");
 	token = NULL;
 	if (input)
 	{

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 16:27:13 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 03:08:06 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int		find_valid_env_var_point(char *data);
 int		check_token(t_list *token);
 char	*my_strtrim(char *data, int start, int end);
 
-int		make_process(t_list *token);
 int		parse_pipe_token(t_list *token);
 int		parse_process(t_proc *proc);
+int		parse_last_process(t_proc *proc);
 int		parse_data(t_proc *proc, t_list *data);
 int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 
@@ -81,7 +81,7 @@ char	*del_small_quot_token(char *data, int start, char **new_data);
 
 int		heredoc(char *limiter);
 int		handle_command(t_proc *proc, t_list *cmd);
-int		handle_last_command(t_proc *proc);
+int		handle_last_command(t_proc *proc, t_list *cmd);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 01:48:17 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 03:18:11 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,16 @@ int	parse_process(t_proc *proc)
 {
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 		handle_command(proc, proc->cmd);
-	//debug(proc->cmd, "data");
+	ft_lstclear(&proc->limiter, free);
+	ft_lstclear(&proc->cmd, free);
+	ft_lstclear(&proc->data, free);
+	return (TRUE);
+}
+
+int	parse_last_process(t_proc *proc)
+{
+	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
+		handle_last_command(proc, proc->cmd);
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);
@@ -83,10 +92,14 @@ int	parse_pipe_token(t_list *token)
 	char	*temp;
 	t_proc	proc;
 
-	temp = NULL;
 	ft_memset(&proc, 0, sizeof(t_proc));
 	while (token)
 	{
+		/*if (ft_strncmp(token->content, "<<", 2) == 0)
+		{
+			heredoc(token->next->content);
+			token = token->next;
+		}*/
 		if (token->content[0] != '|')
 		{
 			temp = ft_strdup(token->content);
@@ -100,7 +113,7 @@ int	parse_pipe_token(t_list *token)
 			ft_memset(&proc, 0, sizeof(t_proc));
 		}
 		if (!token->next)
-			handle_last_command(&proc);
+			parse_last_process(&proc);
 		token = token->next;
 	}
 	return (TRUE);

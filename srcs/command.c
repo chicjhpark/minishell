@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 01:47:49 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 03:10:38 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,35 +62,39 @@ char	**split_command(t_list *cmd)
 	return (exe);
 }
 
+int	execute_command(t_proc *proc, t_list *cmd, int *fd)
+{
+	char	**exe;
+
+	close(fd[0]);
+	if (proc->outfile > 0)
+		dup2(proc->outfile, STDOUT_FILENO);
+	else
+		dup2(fd[1], STDOUT_FILENO);
+	exe = split_command(cmd);
+	if (!exe)
+		return (error_msg("malloc"));
+	if (strncmp(exe[0], "exit", 5) == 0)
+		exit(0);
+	if (exe[0][0] == '/' || exe[0][0] == '.')
+		if (execve(exe[0], exe, val_envp) == -1)
+			return (error_msg(exe[0]));
+	close(fd[1]);
+	if (execve(find_path(exe[0]), exe, val_envp) == -1)
+		return (error_msg(exe[0]));
+	return (0);
+}
+
 int	handle_command(t_proc *proc, t_list *cmd)
 {
 	int		fd[2];
 	pid_t	pid;
-	char	**exe;
 
 	if (pipe(fd) == -1)
 		return (error_msg("pipe"));
 	pid = fork();
 	if (pid == 0)
-	{
-		close(fd[0]);
-		if (proc->outfile > 0)
-			dup2(proc->outfile, STDOUT_FILENO);
-		else
-			dup2(fd[1], STDOUT_FILENO);
-		exe = split_command(cmd);
-		if (!exe)
-			return (error_msg("malloc"));
-		if (strncmp(exe[0], "exit", 5) == 0)
-			exit(0);
-		if (exe[0][0] == '/' || exe[0][0] == '.')
-			if (execve(exe[0], exe, val_envp) == -1)
-				return (error_msg(exe[0]));
-		close(fd[1]);
-		if (execve(find_path(exe[0]), exe, val_envp) == -1)
-			return (error_msg(exe[0]));
-		exit(0);
-	}
+		exit(execute_command(proc, cmd, fd));
 	else if (pid > 0)
 	{
 		close(fd[1]);
@@ -104,45 +108,33 @@ int	handle_command(t_proc *proc, t_list *cmd)
 		close(fd[1]);
 		return (error_msg("fork"));
 	}
-	return (TRUE);
+	return (0);
 }
 
-int	handle_last_command(t_proc *proc)
+int	handle_last_command(t_proc *proc, t_list *cmd)
 {
 	pid_t	pid;
 	char	**exe;
 
-	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
+	pid = fork();
+	if (pid == 0)
 	{
-		pid = fork();
-		if (pid == 0)
-		{
-			if (proc->outfile > 0)
-				dup2(proc->outfile, STDOUT_FILENO);
-			exe = split_command(proc->cmd);
-			if (!exe)
-				return (error_msg("malloc"));
-			if (strncmp(exe[0], "exit", 5) == 0)
-				exit(0);
-			if (exe[0][0] == '/' || exe[0][0] == '.')
-				if (execve(exe[0], exe, val_envp) == -1)
-					return (error_msg(exe[0]));
-			if (execve(find_path(exe[0]), exe, val_envp) == -1)
+		if (proc->outfile > 0)
+			dup2(proc->outfile, STDOUT_FILENO);
+		exe = split_command(cmd);
+		if (!exe)
+			return (error_msg("malloc"));
+		if (strncmp(exe[0], "exit", 5) == 0)
+			exit(0);
+		if (exe[0][0] == '/' || exe[0][0] == '.')
+			if (execve(exe[0], exe, val_envp) == -1)
 				return (error_msg(exe[0]));
-		}
-		else if (pid > 0)
-		{
-			waitpid(pid, 0, 0);
-			//dup2(fd[0], STDOUT_FILENO);
-			//dup2(proc->outfile, STDOUT_FILENO);
-		}
-		else
-		{
-			return (error_msg("fork"));
-		}
+		if (execve(find_path(exe[0]), exe, val_envp) == -1)
+			return (error_msg(exe[0]));
 	}
-	ft_lstclear(&proc->limiter, free);
-	ft_lstclear(&proc->cmd, free);
-	ft_lstclear(&proc->data, free);
-	return (TRUE);
+	else if (pid > 0)
+		waitpid(pid, 0, 0);
+	else
+		return (error_msg("fork"));
+	return (0);
 }
