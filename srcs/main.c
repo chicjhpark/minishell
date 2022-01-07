@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 15:46:06 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:31:30 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,14 @@ void	debug(t_list *lst, char *name)
 
 void	handle_heredoc(t_list *token)
 {
+	int	org_stdin;
+
+	org_stdin = dup(STDIN_FILENO);
 	while (token)
 	{
 		if (strncmp(token->content, "<<", 3) == 0)
 		{
+			dup2(org_stdin, STDIN_FILENO);
 			heredoc(token->next->content);
 			token = token->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 14:05:55 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:25:03 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,6 @@ int	parse_pipe_token(t_list *token)
 			parse_last_process(&proc);
 		token = token->next;
 	}
+	wait(0);
 	return (TRUE);
 }

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 16:21:52 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:27:43 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	handle_command(t_proc *proc, t_list *cmd)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		waitpid(pid, &proc->status, WNOHANG);
+		waitpid(pid, 0, WNOHANG);
 		close(fd[0]);
 	}
 	else
