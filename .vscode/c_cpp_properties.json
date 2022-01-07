@@ -4,6 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "/Users/jhpark/.brew/opt/readline/include/readline",
+                "${workspaceFolder}/libft",
                 "${workspaceFolder}/**"
             ],
             "defines": [],

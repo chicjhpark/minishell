@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 14:00:46 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:21:42 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_proc
 	int		infile;
 	int		outfile;
 	int		pip_flg;
+	int		status;
 }t_proc;
 
 void	debug(t_list *lst, char *name);	// delete

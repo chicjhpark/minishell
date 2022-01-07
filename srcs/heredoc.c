@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 08:14:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 13:08:39 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:06:24 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int	heredoc(char *limiter)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
 		waitpid(pid, 0, 0);
+		close(fd[0]);
 	}
 	else
 		return (error_msg("fork"));

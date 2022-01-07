@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 14:30:39 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 15:46:06 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,35 +90,6 @@ void	execute_builtin_command(t_list *cmd, char **exe)
 	ft_free2(exe);
 }
 
-int	make_process(t_list *token)
-{
-	int		fd[2];
-	pid_t	pid;
-
-	if (pipe(fd) == -1)
-		return (error_msg("pipe"));
-	pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		parse_pipe_token(token);
-	}
-	else if (pid > 0)
-	{
-		close(fd[1]);
-		waitpid(pid, 0, WNOHANG);
-		close(fd[0]);
-	}
-	else
-	{
-		close(fd[0]);
-		close(fd[1]);
-		return (error_msg("fork"));
-	}
-	return (TRUE);
-}
-
 void	get_input(void)
 {
 	char	*input;
@@ -133,7 +104,6 @@ void	get_input(void)
 		{
 			handle_heredoc(token);
 			parse_pipe_token(token);
-			//make_process(token);
 		}
 	}
 	input = ft_free(input);
