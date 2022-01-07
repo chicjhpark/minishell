@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 22:17:27 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 02:28:31 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ void	execute_builtin_command(t_list *cmd, char **exe, char **env_lst)
 	ft_free2(exe);
 }
 
-char	*ft_getenv(char *pre_env, char **env_lst)
+/*char	*ft_getenv(char *pre_env, char **env_lst)
 {
 
-}
+}*/
 
 void	get_input(char **envp)
 {

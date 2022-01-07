@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 22:12:25 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 03:00:19 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ int	parse_pipe_token(t_list *token, char **envp)
 			parse_last_process(&proc, envp);
 		token = token->next;
 	}
-	wait(0);
+	while (wait(0) > 0)
+	{}
 	return (TRUE);
 }
