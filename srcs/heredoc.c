@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 08:14:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 01:59:47 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 13:08:39 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,9 @@ int	get_next_line(char **line)
 
 void	print_line(char *line, char *limiter, int fd)
 {
-	if (ft_strncmp(line, limiter, ft_strlen(line)) == 0)
+	if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		exit(0);
+	write(1, "> ", 2);
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n", 1);
 }
@@ -76,6 +77,7 @@ int	heredoc(char *limiter)
 	if (pid == 0)
 	{
 		close(fd[0]);
+		write(1, "> ", 2);
 		while (get_next_line(&line))
 			print_line(line, limiter, fd[1]);
 		close(fd[1]);
@@ -84,8 +86,8 @@ int	heredoc(char *limiter)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		waitpid(pid, 0, 0);
 		close(fd[0]);
+		waitpid(pid, 0, 0);
 	}
 	else
 		return (error_msg("fork"));

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 03:08:06 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:00:46 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_proc
 	t_list	*limiter;
 	int		infile;
 	int		outfile;
+	int		pip_flg;
 }t_proc;
 
 void	debug(t_list *lst, char *name);	// delete
@@ -80,8 +81,13 @@ char	*expand_data(char *data);
 char	*del_small_quot_token(char *data, int start, char **new_data);
 
 int		heredoc(char *limiter);
+
 int		handle_command(t_proc *proc, t_list *cmd);
 int		handle_last_command(t_proc *proc, t_list *cmd);
+char	**split_command(t_list *cmd);
+
+int		check_builtin_command(t_list *cmd);
+void	execute_builtin_command(t_list *cmd, char **exe);
 
 
 

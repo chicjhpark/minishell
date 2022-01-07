@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 03:12:36 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:30:39 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,100 @@ void	debug(t_list *lst, char *name)
 	}
 }
 
+void	handle_heredoc(t_list *token)
+{
+	while (token)
+	{
+		if (strncmp(token->content, "<<", 3) == 0)
+		{
+			heredoc(token->next->content);
+			token = token->next;
+		}
+		token = token->next;
+	}
+}
+
+int	check_builtin_command(t_list *cmd)
+{
+	/*if (ft_strncmp(cmd->content, "echo", 5) == 0 ||
+		ft_strncmp(cmd->content, "cd", 3) == 0 ||
+		ft_strncmp(cmd->content, "pwd", 4) == 0 ||
+		ft_strncmp(cmd->content, "export", 7) == 0 ||
+		ft_strncmp(cmd->content, "unset", 6) == 0 ||
+		ft_strncmp(cmd->content, "env", 4) == 0 ||
+		ft_strncmp(cmd->content, "exit", 5) == 0)
+		return (TRUE);*/
+	cmd = cmd->next;
+	return (FALSE);
+}
+
+void	*ft_free2(char **p)
+{
+	int	i;
+
+	i = -1;
+	while (p[++i])
+	{
+		if (p[i])
+		{
+			free(p[i]);
+			p[i] = NULL;
+		}
+	}
+	free(p[i]);
+	free(p);
+	return (NULL);
+}
+
+void	execute_builtin_command(t_list *cmd, char **exe)
+{
+	/*if (ft_strncmp(cmd->content, "echo", 5) == 0)
+		ft_echo(exe);
+	if (ft_strncmp(cmd->content, "cd", 3) == 0)
+		ft_cd(exe);
+	if (ft_strncmp(cmd->content, "pwd", 4) == 0)
+		ft_pwd(exe);
+	if (ft_strncmp(cmd->content, "export", 7) == 0)
+		ft_export(exe);
+	if (ft_strncmp(cmd->content, "unset", 6) == 0)
+		ft_unset(exe);
+	if (ft_strncmp(cmd->content, "env", 4) == 0)
+		ft_env(exe);
+	if (ft_strncmp(cmd->content, "exit" 5) == 0)
+		ft_exit(exe);*/
+	cmd = cmd->next;
+	ft_free2(exe);
+}
+
+int	make_process(t_list *token)
+{
+	int		fd[2];
+	pid_t	pid;
+
+	if (pipe(fd) == -1)
+		return (error_msg("pipe"));
+	pid = fork();
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		parse_pipe_token(token);
+	}
+	else if (pid > 0)
+	{
+		close(fd[1]);
+		waitpid(pid, 0, WNOHANG);
+		close(fd[0]);
+	}
+	else
+	{
+		close(fd[0]);
+		close(fd[1]);
+		return (error_msg("fork"));
+	}
+	return (TRUE);
+}
+
 void	get_input(void)
 {
 	char	*input;
@@ -35,9 +129,12 @@ void	get_input(void)
 	if (input)
 	{
 		add_history(input);
-		if (split_token(input, &token) == TRUE
-			&& check_token(token) == TRUE)
+		if (split_token(input, &token) == TRUE && check_token(token) == TRUE)
+		{
+			handle_heredoc(token);
 			parse_pipe_token(token);
+			//make_process(token);
+		}
 	}
 	input = ft_free(input);
 	ft_lstclear(&token, free);

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 09:43:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 01:17:02 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 09:43:45 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	reset_set(t_set *set)
 {
 	dup2(set->org_stdin, STDIN_FILENO);
 	dup2(set->org_stdout, STDOUT_FILENO);
-	//close(set->org_stdout);
-	//close(set->org_stdin);
 	//dup2(STDIN_FILENO, set->org_stdin);
 	//dup2(STDOUT_FILENO, set->org_stdout);
 	//tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);

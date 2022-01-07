@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 03:10:38 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:21:45 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd)
 	exe = split_command(cmd);
 	if (!exe)
 		return (error_msg("malloc"));
-	if (strncmp(exe[0], "exit", 5) == 0)
-		exit(0);
+	if (check_builtin_command(proc->cmd) == TRUE)
+		execute_builtin_command(proc->cmd, exe);
 	if (exe[0][0] == '/' || exe[0][0] == '.')
 		if (execve(exe[0], exe, val_envp) == -1)
 			return (error_msg(exe[0]));
@@ -124,8 +124,8 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		exe = split_command(cmd);
 		if (!exe)
 			return (error_msg("malloc"));
-		if (strncmp(exe[0], "exit", 5) == 0)
-			exit(0);
+		if (check_builtin_command(proc->cmd) == TRUE)
+			execute_builtin_command(proc->cmd, exe);
 		if (exe[0][0] == '/' || exe[0][0] == '.')
 			if (execve(exe[0], exe, val_envp) == -1)
 				return (error_msg(exe[0]));
