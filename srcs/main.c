@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 02:28:31 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 03:05:49 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ void	get_input(char **envp)
 		{
 			handle_heredoc(token);
 			parse_pipe_token(token, envp);
+			while (wait(0) > 0)
+			{
+			}
 		}
 	}
 	input = ft_free(input);
