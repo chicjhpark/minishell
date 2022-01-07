@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 19:25:03 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 22:12:25 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ int	parse_data(t_proc *proc, t_list *data)
 	return (TRUE);
 }
 
-int	parse_process(t_proc *proc)
+int	parse_process(t_proc *proc, char **envp)
 {
+	proc->env_lst = envp;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 		handle_command(proc, proc->cmd);
 	ft_lstclear(&proc->limiter, free);
@@ -77,10 +78,11 @@ int	parse_process(t_proc *proc)
 	return (TRUE);
 }
 
-int	parse_last_process(t_proc *proc)
+int	parse_last_process(t_proc *proc, char **envp)
 {
 	char	**exe;
 
+	proc->env_lst = envp;
 	exe = NULL;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 	{
@@ -91,7 +93,7 @@ int	parse_last_process(t_proc *proc)
 			exe = split_command(proc->cmd);
 			if (!exe)
 				return (error_msg("malloc"));
-			execute_builtin_command(proc->cmd, exe);
+			execute_builtin_command(proc->cmd, exe, proc->env_lst);
 		}
 		else
 			handle_last_command(proc, proc->cmd);
@@ -102,7 +104,7 @@ int	parse_last_process(t_proc *proc)
 	return (TRUE);
 }
 
-int	parse_pipe_token(t_list *token)
+int	parse_pipe_token(t_list *token, char **envp)
 {
 	char	*temp;
 	t_proc	proc;
@@ -119,12 +121,12 @@ int	parse_pipe_token(t_list *token)
 		}
 		if (token->content[0] == '|')
 		{
-			parse_process(&proc);
+			parse_process(&proc, envp);
 			ft_memset(&proc, 0, sizeof(t_proc));
 			proc.pip_flg = TRUE;
 		}
 		if (!token->next)
-			parse_last_process(&proc);
+			parse_last_process(&proc, envp);
 		token = token->next;
 	}
 	wait(0);

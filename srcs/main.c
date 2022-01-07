@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 19:31:30 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 22:17:27 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	*ft_free2(char **p)
 	return (NULL);
 }
 
-void	execute_builtin_command(t_list *cmd, char **exe)
+void	execute_builtin_command(t_list *cmd, char **exe, char **env_lst)
 {
 	/*if (ft_strncmp(cmd->content, "echo", 5) == 0)
 		ft_echo(exe);
@@ -90,11 +90,17 @@ void	execute_builtin_command(t_list *cmd, char **exe)
 		ft_env(exe);
 	if (ft_strncmp(cmd->content, "exit" 5) == 0)
 		ft_exit(exe);*/
+	env_lst = NULL;
 	cmd = cmd->next;
 	ft_free2(exe);
 }
 
-void	get_input(void)
+char	*ft_getenv(char *pre_env, char **env_lst)
+{
+
+}
+
+void	get_input(char **envp)
 {
 	char	*input;
 	t_list	*token;
@@ -107,7 +113,7 @@ void	get_input(void)
 		if (split_token(input, &token) == TRUE && check_token(token) == TRUE)
 		{
 			handle_heredoc(token);
-			parse_pipe_token(token);
+			parse_pipe_token(token, envp);
 		}
 	}
 	input = ft_free(input);
@@ -120,10 +126,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	t_set	set;
 
-	init_set(&set, envp);
+	init_set(&set);
 	while (1)
 	{
-		get_input();
+		get_input(envp);
 		reset_set(&set);
 		//system("leaks minishell");
 	}

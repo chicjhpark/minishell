@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 19:27:39 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 22:12:36 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@
 
 # define ERROR		-1
 
-char	**val_envp;
-
 typedef struct s_set
 {
 	struct termios	org_term;
@@ -41,6 +39,7 @@ typedef struct s_set
 
 typedef struct s_proc
 {
+	char	**env_lst;
 	t_list	*data;
 	t_list	*cmd;
 	t_list	*limiter;
@@ -57,7 +56,7 @@ void	*ft_free(char *p);
 char	*ft_strntrim(char *s, char *set, int n);
 char	*ft_strndup(char *s, int n);
 
-void	init_set(t_set *set, char **envp);
+void	init_set(t_set *set);
 void	reset_set(t_set *set);
 
 int		split_token(char *input, t_list **token);
@@ -72,9 +71,9 @@ int		find_valid_env_var_point(char *data);
 int		check_token(t_list *token);
 char	*my_strtrim(char *data, int start, int end);
 
-int		parse_pipe_token(t_list *token);
-int		parse_process(t_proc *proc);
-int		parse_last_process(t_proc *proc);
+int		parse_pipe_token(t_list *token, char **envp);
+int		parse_process(t_proc *proc, char **envp);
+int		parse_last_process(t_proc *proc, char **envp);
 int		parse_data(t_proc *proc, t_list *data);
 int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 
@@ -88,7 +87,7 @@ int		handle_last_command(t_proc *proc, t_list *cmd);
 char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
-void	execute_builtin_command(t_list *cmd, char **exe);
+void	execute_builtin_command(t_list *cmd, char **exe, char **env_lst);
 
 
 

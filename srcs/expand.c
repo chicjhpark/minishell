@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 05:37:47 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 21:37:34 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*expand_env_var(char *data, int start, char **new_data)
 	char	*temp;
 
 	org_data = *new_data;
-	temp = ft_strndup(data, start); // 환경 변수 전의 문자열
+	temp = ft_strndup(data, start);
 	if (!temp)
 		return (NULL);
 	*new_data = ft_strjoin(*new_data, temp);

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:57:31 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/06 07:16:17 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 21:49:42 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	find_valid_env_var_point(char *data)
 {
 	int	find;
 
+	if (data[0] == '?')
+		return (1);
 	find = 0;
 	while (data[find] && (ft_isalnum(data[find]) || data[find] == '_'))
 		find++;

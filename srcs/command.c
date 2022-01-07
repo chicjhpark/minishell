@@ -6,13 +6,13 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 19:27:43 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/07 22:14:35 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path(char *cmd)
+char	*find_path(char *cmd, char **env_lst)
 {
 	char	**paths;
 	char	*path;
@@ -20,9 +20,9 @@ char	*find_path(char *cmd)
 	int		i;
 
 	i = 0;
-	while (ft_strnstr(val_envp[i], "PATH=", 5) == NULL)
+	while (ft_strnstr(env_lst[i], "PATH=", 5) == NULL)
 		i++;
-	paths = ft_split(val_envp[i] + 5, ':');
+	paths = ft_split(env_lst[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
@@ -75,12 +75,12 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd)
 	if (!exe)
 		return (error_msg("malloc"));
 	if (check_builtin_command(proc->cmd) == TRUE)
-		execute_builtin_command(proc->cmd, exe);
+		execute_builtin_command(proc->cmd, exe, proc->env_lst);
 	if (exe[0][0] == '/' || exe[0][0] == '.')
-		if (execve(exe[0], exe, val_envp) == -1)
+		if (execve(exe[0], exe, proc->env_lst) == -1)
 			return (error_msg(exe[0]));
 	close(fd[1]);
-	if (execve(find_path(exe[0]), exe, val_envp) == -1)
+	if (execve(find_path(exe[0], proc->env_lst), exe, proc->env_lst) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }
@@ -125,11 +125,11 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		if (!exe)
 			return (error_msg("malloc"));
 		if (check_builtin_command(proc->cmd) == TRUE)
-			execute_builtin_command(proc->cmd, exe);
+			execute_builtin_command(proc->cmd, exe, proc->env_lst);
 		if (exe[0][0] == '/' || exe[0][0] == '.')
-			if (execve(exe[0], exe, val_envp) == -1)
+			if (execve(exe[0], exe, proc->env_lst) == -1)
 				return (error_msg(exe[0]));
-		if (execve(find_path(exe[0]), exe, val_envp) == -1)
+		if (execve(find_path(exe[0], proc->env_lst), exe, proc->env_lst) == -1)
 			return (error_msg(exe[0]));
 	}
 	else if (pid > 0)
