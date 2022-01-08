@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:00:48 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:00:53 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:31:43 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,8 @@ void	exit_extra_cases(int c, char *s)
 
 void	ft_exit(char **dbuf)
 {
-	if (!dbuf)
+	if (!dbuf[0])
 	{
-		printf("exit\n");
 		exit(0);
 	}
 	if (!valid_exit_arg(dbuf[0]))
@@ -70,7 +69,7 @@ void	ft_exit(char **dbuf)
 	else if (!dbuf[1])
 	{
 		printf("exit\n");
-		exit(exit_numeric_arg_cal(dbuf[1]));
+		exit(exit_numeric_arg_cal(dbuf[0]));
 	}
 	else
 	{

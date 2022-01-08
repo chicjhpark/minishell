@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 02:07:17 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:2242:41 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	check_builtin_command(t_list *cmd)
 void	execute_builtin_command(t_proc *proc, char **exe)
 {
 	exe = &exe[1];
-	printf("%s\n", exe[0]);
 	if (ft_strncmp(proc->cmd->content, "echo", 5) == 0)
 		ft_echo(exe);
 	if (ft_strncmp(proc->cmd->content, "cd", 3) == 0)
@@ -74,12 +73,6 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 		ft_env(proc->env_lst);
 	if (ft_strncmp(proc->cmd->content, "exit", 5) == 0)
 		ft_exit(exe);
-}
-
-char	*ft_getenv(char *pre_env, char **env_lst)
-{
-	return (getenv(pre_env));
-	env_lst = 0;
 }
 
 void	handler(int status)
@@ -101,15 +94,16 @@ void	handler(int status)
 	}
 }
 
-void	parse_input(char *input, char **envp)
+void	parse_input(char *input, t_env *env, char **envp)
 {
 	t_list	*token;
 
+	token = 0;
 	add_history(input);
 	if (split_token(input, &token) == TRUE && check_token(token) == TRUE)
 	{
 		handle_heredoc(token);
-		parse_pipe_token(token, envp);
+		parse_pipe_token(token, env, envp);
 		while (waitpid(-1, &g_stat, 0) > 0)
 			continue ;
 	}
@@ -121,22 +115,23 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	t_set	set;
+	t_env	*env;
 	char	*input;
 
+	env = env_set(envp);
 	init_set(&set);
 	signal(SIGQUIT, handler);
 	signal(SIGINT, handler);
 	while (1)
 	{
-		// signal(SIGQUIT, handler);
-		// signal(SIGINT, handler);
 		input = readline("$ ");
 		if (!input)
 		{
 			reset_set(&set);
+			//free(env);
 			exit(0);
 		}
-		parse_input(input, envp);
+		parse_input(input, env, envp);
 		input = ft_free(input);
 		reset_stdio(&set);
 		//system("leaks minishell");

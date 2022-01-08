@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:38:42 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:24:57 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,7 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		exit(g_stat);
 	}
 	else if (pid > 0)
-	{}
-		//waitpid(pid, &g_stat, 0);
+		return (0);
 	else
 		return (error_msg("fork"));
 	return (0);

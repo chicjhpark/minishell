@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 02:07:30 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:01:11 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ int		find_valid_env_var_point(char *data);
 int		check_token(t_list *token);
 char	*my_strtrim(char *data, int start, int end);
 
-int		parse_pipe_token(t_list *token, char **envp);
-int		parse_process(t_proc *proc, char **envp);
-int		parse_last_process(t_proc *proc, char **envp);
+int		parse_pipe_token(t_list *token, t_env *env, char **envp);
+int		parse_process(t_proc *proc, t_env *env, char **envp);
+int		parse_last_process(t_proc *proc, t_env *env, char **envp);
 int		parse_data(t_proc *proc, t_list *data);
 int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 
@@ -123,7 +123,5 @@ char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
 void	execute_builtin_command(t_proc *proc, char **exe);
-
-char	*ft_getenv(char *pre_env, char **env_lst);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:02:06 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:44:42 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 02:48:03 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_cd(char **buf, t_env *env_list)
 	int	err;
 	int	temp;
 
-	if (!buf[1])
+	if (!buf[0])
 	{
 		chdir(read_value_of_key(env_list, "HOME"));
 		g_stat = 0;

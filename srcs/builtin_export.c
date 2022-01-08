@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:01:00 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:51:24 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:02:23 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,7 @@ void	ft_export(char **dbuf, t_env *env_list)
 	}
 	while (*dbuf)
 	{
-		printf("debug\n");
 		splits = ft_split(*(dbuf++), '=');
-		printf("1 : %s\n", splits[0]);
-		printf("2 : %s\n", splits[1]);
 		if (!splits[1] || !export_key_syntax_check(splits[0]))
 			continue ;
 		temp = env_dup_check(env_list, splits[0]);

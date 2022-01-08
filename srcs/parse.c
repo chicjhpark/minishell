@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:38:02 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:28:08 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,23 @@ int	parse_data(t_proc *proc, t_list *data)
 	return (TRUE);
 }
 
-int	parse_process(t_proc *proc, char **envp)
+int	parse_process(t_proc *proc, t_env *env, char **envp)
 {
-	proc->env_lst = env_set(envp);
+	proc->env_lst = env;
 	proc->org_env = envp;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 		handle_command(proc, proc->cmd);
-	//ft_lstclear(&proc->env_lst, free);
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);
 	return (TRUE);
 }
 
-int	parse_last_process(t_proc *proc, char **envp)
+int	parse_last_process(t_proc *proc, t_env *env, char **envp)
 {
 	char	**exe;
 
-	proc->env_lst = env_set(envp);
+	proc->env_lst = env;
 	proc->org_env = envp;
 	exe = NULL;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
@@ -108,7 +107,7 @@ int	parse_last_process(t_proc *proc, char **envp)
 	return (TRUE);
 }
 
-int	parse_pipe_token(t_list *token, char **envp)
+int	parse_pipe_token(t_list *token, t_env *env, char **envp)
 {
 	char	*temp;
 	t_proc	proc;
@@ -125,12 +124,12 @@ int	parse_pipe_token(t_list *token, char **envp)
 		}
 		if (token->content[0] == '|')
 		{
-			parse_process(&proc, envp);
+			parse_process(&proc, env, envp);
 			ft_memset(&proc, 0, sizeof(t_proc));
 			proc.pip_flg = TRUE;
 		}
 		if (!token->next)
-			parse_last_process(&proc, envp);
+			parse_last_process(&proc, env, envp);
 		token = token->next;
 	}
 	return (TRUE);

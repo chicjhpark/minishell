@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:32:57 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 02:49:13 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data)
 		get_env = read_value_of_key(proc->env_lst, get_env);
 	ft_free(temp);
 	*new_data = ft_strjoin(*new_data, get_env);
-	if (*new_data)
+	if (!(*new_data))
 		return (NULL);
 	ft_free(get_env);
 	return (data);
