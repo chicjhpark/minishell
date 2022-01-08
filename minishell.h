@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:57:08 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 07:00:33 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,8 @@ char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
 void	execute_builtin_command(t_proc *proc, char **exe);
+void	ft_replace_line(int var_stat);
+void	ft_handler(int status);
 
 char	*parse_pre_env_var(char *data, int start, char *new_data);
 char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data);

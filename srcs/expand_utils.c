@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:42:15 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:57:56 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:58:23 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,3 @@ char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data)
 	}
 	return (data);
 }
-
