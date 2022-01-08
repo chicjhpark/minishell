@@ -88,11 +88,20 @@ void	handler(int status)
 			rl_replace_line("", 0);
 			rl_on_new_line();
 			rl_redisplay();
+			g_stat = 1;
+		}
+		else
+		{
+			write(1, "\n", 1);
 			g_stat = 130;
-
 		}
 	}
-	if (status == SIGQUIT)
+	else if (status == SIGQUIT && pid != -1)
+	{
+		write(1, "Quit: 3\n", 8);
+		g_stat = 131;
+	}
+	else
 	{
 		rl_replace_line("", 0);
 		rl_on_new_line();
