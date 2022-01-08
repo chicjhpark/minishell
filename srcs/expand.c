@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:43:46 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:53:23 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,25 @@ char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data)
 	return (data);
 }
 
-char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end, int i)
+char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data)
+{
+	int	i;
+
+	i = -1;
+	while (data[++i])
+	{
+		if (data[i] == '$')
+		{
+			data = expand_env_var(proc, data, i, new_data);
+			if (!data)
+				return (ft_free(*new_data));
+			i = -1;
+		}
+	}
+	return (data);
+}
+
+char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end)
 {
 	char	*new_data;
 	char	*temp;
@@ -71,17 +89,9 @@ char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end, int i
 	data = ft_strndup(data, end - start - 1);
 	if (!data)
 		return (ft_free(new_data));
-	i = -1;
-	while (data[++i])
-	{
-		if (data[i] == '$')
-		{
-			data = expand_env_var(proc, data, i, &new_data);
-			if (!data)
-				return (ft_free(new_data));
-			i = -1;
-		}
-	}
+	data = expand_in_quot_utils(proc, data, &new_data);
+	if (!data)
+		return (NULL);
 	temp = new_data;
 	new_data = ft_strjoin(new_data, data);
 	ft_free(temp);
@@ -98,7 +108,7 @@ char	*del_big_quot_token(t_proc *proc, char *data, int start, char **new_data)
 	temp = NULL;
 	end = find_valid_quot_point(data, start);
 	if (find_env_var_token(data, start, end) == TRUE)
-		temp = expand_in_quot_env_var(proc, data, start, end, -1);
+		temp = expand_in_quot_env_var(proc, data, start, end);
 	else
 		temp = my_strtrim(data, start, end);
 	if (!temp)

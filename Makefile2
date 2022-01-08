@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/09 04:09:51 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/09 06:47:15 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SRCS_NAME		= main.c \
 					builtin2.c \
 					builtin_exit.c \
 					builtin_export.c \
-					builtin_tools.c
+					builtin_tools.c \
+					expand_utils.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 
