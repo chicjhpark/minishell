@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:2242:41 by jaehpark         ###   ########.fr       */
+/*   Created: 2022/01/09 04:05:51 by jaehpark          #+#    #+#             */
+/*   Updated: 2022/01/09 04:06:14 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ void	handle_heredoc(t_list *token)
 int	check_builtin_command(t_list *cmd)
 {
 	if (ft_strncmp(cmd->content, "echo", 5) == 0 ||
-		ft_strncmp(cmd->content, "cd", 3) == 0 ||
-		ft_strncmp(cmd->content, "pwd", 4) == 0 ||
-		ft_strncmp(cmd->content, "export", 7) == 0 ||
-		ft_strncmp(cmd->content, "unset", 6) == 0 ||
-		ft_strncmp(cmd->content, "env", 4) == 0 ||
-		ft_strncmp(cmd->content, "exit", 5) == 0)
+	ft_strncmp(cmd->content, "cd", 3) == 0 ||
+	ft_strncmp(cmd->content, "pwd", 4) == 0 ||
+	ft_strncmp(cmd->content, "export", 7) == 0 ||
+	ft_strncmp(cmd->content, "unset", 6) == 0 ||
+	ft_strncmp(cmd->content, "env", 4) == 0 ||
+	ft_strncmp(cmd->content, "exit", 5) == 0)
 		return (TRUE);
 	cmd = cmd->next;
 	return (FALSE);

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:24:57 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 04:03:43 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,7 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		else
 			proc->status = execve(find_path(exe[0], proc->org_env), exe, 0);
 		if (proc->status == -1)
-			error_msg(exe[0]);
-		exit(g_stat);
+			exit(error_msg(exe[0]));
 	}
 	else if (pid > 0)
 		return (0);

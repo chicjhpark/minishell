@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 00:00:20 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 04:03:32 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	error_msg(char *msg)
 		}
 	}
 	write(2, "\n", 1);
-	return (ERROR);
+	return (g_stat);
 }
 
 void	*ft_free(char *p)
