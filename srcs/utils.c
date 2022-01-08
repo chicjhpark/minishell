@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 09:49:14 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 00:00:20 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	error_msg(char *msg)
 	}
 	else
 	{
+		g_stat = 127;
 		write(2, msg, ft_strlen(msg));
 		if (ft_strncmp(strerror(errno), "Bad address", 12) == 0)
 			write(2, ": command not found", 19);

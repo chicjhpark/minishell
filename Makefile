@@ -6,7 +6,7 @@
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/06 16:27:53 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/09 01:02:39 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,12 @@ SRCS_NAME		= main.c \
 					split_token.c \
 					expand.c \
 					command.c \
-					heredoc.c
+					heredoc.c \
+					builtin1.c \
+					builtin2.c \
+					builtin_exit.c \
+					builtin_export.c \
+					builtin_tools.c
 
 SRCS			= $(addprefix $(SRCS_DIR)/, $(SRCS_NAME))
 

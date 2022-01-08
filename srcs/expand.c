@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 10:23:16 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:32:57 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*del_small_quot_token(char *data, int start, char **new_data)
 	return (data);
 }
 
-char	*expand_env_var(char *data, int start, char **new_data)
+char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data)
 {
 	char	*org_data;
 	char	*get_env;
@@ -54,13 +54,19 @@ char	*expand_env_var(char *data, int start, char **new_data)
 	if (!get_env)
 		return (ft_free(*new_data));
 	temp = get_env;
-	get_env = getenv(get_env);
+	if (get_env[0] == '?')
+		get_env = ft_itoa(g_stat);
+	else
+		get_env = read_value_of_key(proc->env_lst, get_env);
 	ft_free(temp);
 	*new_data = ft_strjoin(*new_data, get_env);
+	if (*new_data)
+		return (NULL);
+	ft_free(get_env);
 	return (data);
 }
 
-char	*expand_in_quot_env_var(char *data, int start, int end, int i)
+char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end, int i)
 {
 	char	*new_data;
 	char	*temp;
@@ -77,7 +83,7 @@ char	*expand_in_quot_env_var(char *data, int start, int end, int i)
 	{
 		if (data[i] == '$')
 		{
-			data = expand_env_var(data, i, &new_data);
+			data = expand_env_var(proc, data, i, &new_data);
 			if (!data)
 				return (ft_free(new_data));
 			i = -1;
@@ -89,7 +95,7 @@ char	*expand_in_quot_env_var(char *data, int start, int end, int i)
 	return (new_data);
 }
 
-char	*del_big_quot_token(char *data, int start, char **new_data)
+char	*del_big_quot_token(t_proc *proc, char *data, int start, char **new_data)
 {
 	char	*org_data;
 	char	*temp;
@@ -99,7 +105,7 @@ char	*del_big_quot_token(char *data, int start, char **new_data)
 	temp = NULL;
 	end = find_valid_quot_point(data, start);
 	if (find_env_var_token(data, start, end) == TRUE)
-		temp = expand_in_quot_env_var(data, start, end, -1);
+		temp = expand_in_quot_env_var(proc, data, start, end, -1);
 	else
 		temp = my_strtrim(data, start, end);
 	if (!temp)
@@ -113,7 +119,7 @@ char	*del_big_quot_token(char *data, int start, char **new_data)
 	return (data);
 }
 
-char	*expand_data(char *data)
+char	*expand_data(t_proc *proc, char *data)
 {
 	char	*new_data;
 	char	*temp;
@@ -126,9 +132,9 @@ char	*expand_data(char *data)
 		if (data[i] == '\'' && i != find_valid_quot_point(data, i))
 			data = del_small_quot_token(data, i, &new_data);
 		else if (data[i] == '\"' && i != find_valid_quot_point(data, i))
-			data = del_big_quot_token(data, i, &new_data);
+			data = del_big_quot_token(proc, data, i, &new_data);
 		else if (data[i] == '$')
-			data = expand_env_var(data, i, &new_data);
+			data = expand_env_var(proc, data, i, &new_data);
 		else
 			continue ;
 		if (!data)

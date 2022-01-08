@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 13:27:50 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 02:07:17 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,75 +44,61 @@ void	handle_heredoc(t_list *token)
 
 int	check_builtin_command(t_list *cmd)
 {
-	/*if (ft_strncmp(cmd->content, "echo", 5) == 0 ||
+	if (ft_strncmp(cmd->content, "echo", 5) == 0 ||
 		ft_strncmp(cmd->content, "cd", 3) == 0 ||
 		ft_strncmp(cmd->content, "pwd", 4) == 0 ||
 		ft_strncmp(cmd->content, "export", 7) == 0 ||
 		ft_strncmp(cmd->content, "unset", 6) == 0 ||
 		ft_strncmp(cmd->content, "env", 4) == 0 ||
 		ft_strncmp(cmd->content, "exit", 5) == 0)
-		return (TRUE);*/
+		return (TRUE);
 	cmd = cmd->next;
 	return (FALSE);
 }
 
-void	execute_builtin_command(t_proc *proc, char **exe, char **env_lst)
+void	execute_builtin_command(t_proc *proc, char **exe)
 {
-	/*if (ft_strncmp(cmd->content, "echo", 5) == 0)
+	exe = &exe[1];
+	printf("%s\n", exe[0]);
+	if (ft_strncmp(proc->cmd->content, "echo", 5) == 0)
 		ft_echo(exe);
-	if (ft_strncmp(cmd->content, "cd", 3) == 0)
-		ft_cd(exe);
-	if (ft_strncmp(cmd->content, "pwd", 4) == 0)
-		ft_pwd(exe);
-	if (ft_strncmp(cmd->content, "export", 7) == 0)
-		ft_export(exe);
-	if (ft_strncmp(cmd->content, "unset", 6) == 0)
-		ft_unset(exe);
-	if (ft_strncmp(cmd->content, "env", 4) == 0)
-		ft_env(exe);
-	if (ft_strncmp(cmd->content, "exit" 5) == 0)
-		ft_exit(exe);*/
-	env_lst = NULL;
-	proc = NULL;
-	ft_free2(exe);
+	if (ft_strncmp(proc->cmd->content, "cd", 3) == 0)
+		ft_cd(exe, proc->env_lst);
+	if (ft_strncmp(proc->cmd->content, "pwd", 4) == 0)
+		ft_pwd();
+	if (ft_strncmp(proc->cmd->content, "export", 7) == 0)
+		ft_export(exe, proc->env_lst);
+	if (ft_strncmp(proc->cmd->content, "unset", 6) == 0)
+		ft_unset(exe, &proc->env_lst);
+	if (ft_strncmp(proc->cmd->content, "env", 4) == 0)
+		ft_env(proc->env_lst);
+	if (ft_strncmp(proc->cmd->content, "exit", 5) == 0)
+		ft_exit(exe);
 }
 
 char	*ft_getenv(char *pre_env, char **env_lst)
 {
-	if (pre_env[0] == '?')
-		return ("[exit]");
 	return (getenv(pre_env));
 	env_lst = 0;
-}
-
-void	init_term(t_set *set)
-{
-	set->new_term.c_lflag &= 0;
-	set->new_term.c_cc[VMIN] = 0;
-	set->new_term.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);
 }
 
 void	handler(int status)
 {
 	if (status == SIGINT)
 	{
+		write(1, "\n", 1);
 		rl_replace_line("", 0);
-		rl_redisplay();
-		rl_done = 1;
 		rl_on_new_line();
+		rl_redisplay();
+		g_stat = 130;
 	}
-}
-
-void	handle_ctrl(char *input, t_set *set)
-{
-	if (!input)
+	if (status == SIGQUIT)
 	{
-		//printf("exit\n");
-		reset_set(set);
-		exit(0);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		g_stat = 131;
 	}
-	//init_term(set);
 }
 
 void	parse_input(char *input, char **envp)
@@ -124,7 +110,7 @@ void	parse_input(char *input, char **envp)
 	{
 		handle_heredoc(token);
 		parse_pipe_token(token, envp);
-		while (wait(0) > 0)
+		while (waitpid(-1, &g_stat, 0) > 0)
 			continue ;
 	}
 	ft_lstclear(&token, free);
@@ -138,12 +124,18 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 
 	init_set(&set);
+	signal(SIGQUIT, handler);
+	signal(SIGINT, handler);
 	while (1)
 	{
-		//signal(SIGINT, handler);
+		// signal(SIGQUIT, handler);
+		// signal(SIGINT, handler);
 		input = readline("$ ");
 		if (!input)
-			handle_ctrl(input, &set);
+		{
+			reset_set(&set);
+			exit(0);
+		}
 		parse_input(input, envp);
 		input = ft_free(input);
 		reset_stdio(&set);

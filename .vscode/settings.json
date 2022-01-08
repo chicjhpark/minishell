@@ -4,6 +4,7 @@
 		"libft.h": "c",
 		"readline.h": "c",
 		"history.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"termios.h": "c"
 	}
 }

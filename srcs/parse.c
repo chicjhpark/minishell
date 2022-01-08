@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 09:02:54 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:38:02 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	parse_data(t_proc *proc, t_list *data)
 	{
 		if (data->content[0] == '<' || data->content[0] == '>')
 		{
-			temp = expand_data(data->next->content);
+			temp = expand_data(proc, data->next->content);
 			if (!temp)
 				return (error_msg("malloc"));
 			else if (parse_std_inout_redirection(proc, data, temp) == ERROR)
@@ -57,7 +57,7 @@ int	parse_data(t_proc *proc, t_list *data)
 		}
 		else
 		{
-			temp = expand_data(data->content);
+			temp = expand_data(proc, data->content);
 			if (!temp)
 				return (error_msg("malloc"));
 			ft_lstadd_back(&proc->cmd, ft_lstnew(temp));
@@ -69,9 +69,11 @@ int	parse_data(t_proc *proc, t_list *data)
 
 int	parse_process(t_proc *proc, char **envp)
 {
-	proc->env_lst = envp;
+	proc->env_lst = env_set(envp);
+	proc->org_env = envp;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 		handle_command(proc, proc->cmd);
+	//ft_lstclear(&proc->env_lst, free);
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);
@@ -82,7 +84,8 @@ int	parse_last_process(t_proc *proc, char **envp)
 {
 	char	**exe;
 
-	proc->env_lst = envp;
+	proc->env_lst = env_set(envp);
+	proc->org_env = envp;
 	exe = NULL;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 	{
@@ -93,11 +96,12 @@ int	parse_last_process(t_proc *proc, char **envp)
 			exe = split_command(proc->cmd);
 			if (!exe)
 				return (error_msg("malloc"));
-			execute_builtin_command(proc, exe, proc->env_lst);
+			execute_builtin_command(proc, exe);
 		}
 		else
 			handle_last_command(proc, proc->cmd);
 	}
+	//ft_lstclear(&proc->env_lst, free);
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);

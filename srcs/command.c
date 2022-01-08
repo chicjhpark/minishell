@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 12:15:53 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 13:18:04 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:38:42 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd)
 	if (!exe)
 		return (error_msg("malloc"));
 	if (check_builtin_command(proc->cmd) == TRUE)
-		execute_builtin_command(proc, exe, proc->env_lst);
+		execute_builtin_command(proc, exe);
 	if (exe[0][0] == '/' || exe[0][0] == '.')
-		if (execve(exe[0], exe, proc->env_lst) == -1)
+		if (execve(exe[0], exe, 0) == -1)
 			return (error_msg(exe[0]));
 	close(fd[1]);
-	if (execve(find_path(exe[0], proc->env_lst), exe, proc->env_lst) == -1)
+	if (execve(find_path(exe[0], proc->org_env), exe, 0) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }
@@ -124,17 +124,18 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		if (!exe)
 			return (error_msg("malloc"));
 		if (check_builtin_command(proc->cmd) == TRUE)
-			execute_builtin_command(proc, exe, proc->env_lst);
+			execute_builtin_command(proc, exe);
 		if (exe[0][0] == '/' || exe[0][0] == '.')
-			if (execve(exe[0], exe, proc->env_lst) == -1)
-				return (error_msg(exe[0]));
-		proc->status = execve(find_path(exe[0], proc->env_lst), exe, proc->env_lst);
+			proc->status = execve(exe[0], exe, 0);
+		else
+			proc->status = execve(find_path(exe[0], proc->org_env), exe, 0);
 		if (proc->status == -1)
 			error_msg(exe[0]);
-		exit(proc->status);
+		exit(g_stat);
 	}
 	else if (pid > 0)
-		waitpid(pid, &proc->status, 0);
+	{}
+		//waitpid(pid, &g_stat, 0);
 	else
 		return (error_msg("fork"));
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 10:08:34 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 02:07:30 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@
 
 # define ERROR		-1
 
+int	g_stat;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				print_check;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_set
 {
 	struct termios	org_term;
@@ -39,17 +49,40 @@ typedef struct s_set
 
 typedef struct s_proc
 {
-	char	**env_lst;
+	t_env	*env_lst;
 	t_list	*data;
 	t_list	*cmd;
 	t_list	*limiter;
+	char	**org_env;
 	int		infile;
 	int		outfile;
 	int		pip_flg;
 	int		status;
 }t_proc;
 
-void	debug(t_list *lst, char *name);	// delete
+t_env	*env_dup_check(t_env *env_list, char *new_key);
+int		ft_strcmp(const char *s1, const char *s2);
+void	ft_free_split(char **draw);
+void	env_lstadd_back(t_env **lst, t_env *new,
+			char *key, char *value);
+t_env	*env_set(char **envp);
+void	cd_error(int err, char *arg);
+void	ft_cd(char **buf, t_env *env_list);
+void	ft_env(t_env *env_list);
+int		unset_key_syntax_check(char *s);
+void	ft_unset(char **dbuf, t_env **env_list);
+char	*read_value_of_key(t_env *env_list, char *key);
+int		ft_echo(char **buf);
+void	ft_pwd(void);
+int		export_key_syntax_error(char *s);
+int		export_key_syntax_check(char *s);
+void	reset_env_print_check(t_env *env_list);
+void	print_env_in_order(t_env *env_list);
+void	ft_export(char **dbuf, t_env *env_list);
+int		valid_exit_arg(char	*arg);
+int		exit_numeric_arg_cal(char *arg);
+void	exit_extra_cases(int c, char *s);
+void	ft_exit(char **dbuf);
 
 int		error_msg(char *msg);
 void	*ft_free(char *p);
@@ -79,7 +112,7 @@ int		parse_last_process(t_proc *proc, char **envp);
 int		parse_data(t_proc *proc, t_list *data);
 int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 
-char	*expand_data(char *data);
+char	*expand_data(t_proc *proc, char *data);
 char	*del_small_quot_token(char *data, int start, char **new_data);
 
 int		heredoc(char *limiter);
@@ -89,6 +122,8 @@ int		handle_last_command(t_proc *proc, t_list *cmd);
 char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
-void	execute_builtin_command(t_proc *proc, char **exe, char **env_lst);
+void	execute_builtin_command(t_proc *proc, char **exe);
+
+char	*ft_getenv(char *pre_env, char **env_lst);
 
 #endif
