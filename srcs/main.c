@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunim <gunim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/09 04:05:51 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 04:11:19 by gunim           ###   ########.fr       */
+/*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
+/*   Updated: 2022/01/09 05:41:49 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	handle_heredoc(t_list *token)
 
 int	check_builtin_command(t_list *cmd)
 {
-	if (ft_strncmp(cmd->content, "echo", 5) == 0 ||
-	ft_strncmp(cmd->content, "cd", 3) == 0 ||
-	ft_strncmp(cmd->content, "pwd", 4) == 0 ||
-	ft_strncmp(cmd->content, "export", 7) == 0 ||
-	ft_strncmp(cmd->content, "unset", 6) == 0 ||
-	ft_strncmp(cmd->content, "env", 4) == 0 ||
-	ft_strncmp(cmd->content, "exit", 5) == 0)
+	if (ft_strncmp(cmd->content, "echo", 5) == 0
+		|| ft_strncmp(cmd->content, "cd", 3) == 0
+		|| ft_strncmp(cmd->content, "pwd", 4) == 0
+		|| ft_strncmp(cmd->content, "export", 7) == 0
+		|| ft_strncmp(cmd->content, "unset", 6) == 0
+		|| ft_strncmp(cmd->content, "env", 4) == 0
+		|| ft_strncmp(cmd->content, "exit", 5) == 0)
 		return (TRUE);
 	cmd = cmd->next;
 	return (FALSE);
@@ -147,7 +147,6 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 		{
 			reset_set(&set);
-			//free(env);
 			exit(0);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, &set.org_term);

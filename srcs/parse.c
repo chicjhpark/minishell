@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 04:09:51 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 05:42:19 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int	parse_last_process(t_proc *proc, t_env *env, char **envp)
 		else
 			handle_last_command(proc, proc->cmd);
 	}
-	//ft_lstclear(&proc->env_lst, free);
 	ft_lstclear(&proc->limiter, free);
 	ft_lstclear(&proc->cmd, free);
 	ft_lstclear(&proc->data, free);

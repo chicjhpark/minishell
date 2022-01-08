@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:57:31 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 04:09:51 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 05:42:36 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	check_token(t_list *token)
 	i = 0;
 	while (token)
 	{
-		if (token->content[0] == '|' && (i == 0 ||
-		!token->next || token->next->content[0] == '|'))
+		if (token->content[0] == '|' && (i == 0
+				|| !token->next || token->next->content[0] == '|'))
 			return (error_msg("|"));
 		else if (token->content[0] == '<' || token->content[0] == '>')
 		{

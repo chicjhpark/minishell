@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:02:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:05:08 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 05:42:04 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,15 @@ int	ft_echo(char **buf)
 	int	i;
 
 	i = 0;
-	while (buf[i + 1] != NULL && !ft_strcmp(buf[i + 1], "-n"))
-	{
+	while (buf[i] != NULL && !ft_strcmp(buf[i], "-n"))
 		i++;
-		if (buf[i + 1] == NULL)
-			break ;
-	}
 	while (buf[i])
 	{
 		printf("%s", buf[i]);
 		if (buf[i++ + 1] != 0)
 			printf(" ");
 	}
-	if ((i == 1) || (i > 1 && ft_strcmp(buf[0], "-n") != 0))
+	if ((i == 0) || (i > 0 && ft_strcmp(buf[0], "-n") != 0))
 		printf("\n");
 	g_stat = 0;
 	return (0);

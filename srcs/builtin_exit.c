@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:00:48 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:33:15 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 05:41:51 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	valid_exit_arg(char	*arg)
 	int	i;
 
 	i = 0;
-	if (ft_strlen(arg) > 8)
+	if (ft_strlen(arg) > 18)
 		return (0);
 	if (arg[0] == '-' || arg[0] == '+' )
 		i++;
