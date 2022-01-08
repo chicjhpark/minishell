@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 09:43:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 00:45:10 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:55:12 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ void	init_set(t_set *set)
 	set->org_stdin = dup(STDIN_FILENO);
 	set->org_stdout = dup(STDOUT_FILENO);
 	tcgetattr(STDIN_FILENO, &set->org_term);
+	tcgetattr(STDIN_FILENO, &set->new_term);
+	set->new_term.c_lflag &= ECHO;
+	set->new_term.c_cc[VMIN] = 1;
+	set->new_term.c_cc[VTIME] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &set->new_term);
+}
+
+void	init_set2(t_set *set)
+{
 	tcgetattr(STDIN_FILENO, &set->new_term);
 	set->new_term.c_lflag &= ECHO;
 	set->new_term.c_cc[VMIN] = 1;

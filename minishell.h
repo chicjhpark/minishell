@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:01:11 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 03:51:02 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ char	*ft_strndup(char *s, int n);
 void	init_set(t_set *set);
 void	reset_set(t_set *set);
 void	reset_stdio(t_set *set);
+void	init_set2(t_set *set);
 
 int		split_token(char *input, t_list **token);
 int		split_rest_token(char *input, t_list **token);

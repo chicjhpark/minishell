@@ -120,10 +120,11 @@ int	main(int argc, char **argv, char **envp)
 
 	env = env_set(envp);
 	init_set(&set);
-	signal(SIGQUIT, handler);
-	signal(SIGINT, handler);
 	while (1)
 	{
+		init_set2(&set);
+		signal(SIGQUIT, handler);
+		signal(SIGINT, handler);
 		input = readline("$ ");
 		if (!input)
 		{
@@ -131,6 +132,7 @@ int	main(int argc, char **argv, char **envp)
 			//free(env);
 			exit(0);
 		}
+		tcsetattr(STDIN_FILENO, TCSANOW, &set.org_term);
 		parse_input(input, env, envp);
 		input = ft_free(input);
 		reset_stdio(&set);
