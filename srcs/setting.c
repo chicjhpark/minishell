@@ -6,14 +6,15 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 09:43:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:42:14 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 07:04:13 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_set(t_set *set)
+void	init_set(t_set *set, t_env **env, char **envp)
 {
+	*env = env_set(envp);
 	g_stat = 0;
 	ft_memset(set, 0, sizeof(t_set));
 	set->org_stdin = dup(STDIN_FILENO);

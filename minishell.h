@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 07:00:33 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 07:04:22 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	*ft_free2(char **p);
 char	*ft_strntrim(char *s, char *set, int n);
 char	*ft_strndup(char *s, int n);
 
-void	init_set(t_set *set);
+void	init_set(t_set *set, t_env **env, char **envp);
 void	reset_set(t_set *set);
 void	reset_stdio(t_set *set);
 void	init_set2(t_set *set);

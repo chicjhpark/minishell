@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 07:00:40 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 07:04:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,13 @@ void	parse_input(char *input, t_env *env, char **envp)
 
 int	main(int argc, char **argv, char **envp)
 {
-	(void)argc;
-	(void)argv;
 	t_set	set;
 	t_env	*env;
 	char	*input;
 
-	env = env_set(envp);
-	init_set(&set);
+	argc = 0;
+	argv = 0;
+	init_set(&set, &env, envp);
 	while (1)
 	{
 		init_set2(&set);
