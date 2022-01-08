@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:08:22 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:42:27 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,7 @@ char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
 void	execute_builtin_command(t_proc *proc, char **exe);
+
+char	*parse_pre_env_var(char *data, int start, char *new_data);
 
 #endif

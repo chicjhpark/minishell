@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:27:38 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:43:46 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,10 @@ char	*del_small_quot_token(char *data, int start, char **new_data)
 
 char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data)
 {
-	char	*org_data;
 	char	*get_env;
 	char	*temp;
 
-	org_data = *new_data;
-	temp = ft_strndup(data, start);
-	if (!temp)
-		return (NULL);
-	*new_data = ft_strjoin(*new_data, temp);
-	ft_free(temp);
-	ft_free(org_data);
+	*new_data = parse_pre_env_var(data, start, *new_data);
 	if (!(*new_data))
 		return (NULL);
 	data = &data[start + 1];
