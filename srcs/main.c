@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: gunim <gunim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 04:05:51 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 04:06:14 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 04:11:19 by gunim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,20 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 
 void	handler(int status)
 {
+	pid_t	pid;
+
+	pid = waitpid(-1, 0, WNOHANG);
 	if (status == SIGINT)
 	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		g_stat = 130;
+		if (pid == -1)
+		{
+			write(1, "\n", 1);
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
+			g_stat = 130;
+
+		}
 	}
 	if (status == SIGQUIT)
 	{
@@ -107,6 +114,8 @@ void	parse_input(char *input, t_env *env, char **envp)
 		while (waitpid(-1, &g_stat, 0) > 0)
 			continue ;
 	}
+	if (WIFEXITED(g_stat))
+		g_stat = WEXITSTATUS(g_stat);
 	ft_lstclear(&token, free);
 }
 

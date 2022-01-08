@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 10:15:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 04:03:32 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 04:12:28 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	error_msg(char *msg)
 {
+	g_stat = 1;
 	write(2, "bash: ", 6);
 	if (!msg)
 		write(2, "syntax error near unexpected token 'newline'", 44);
