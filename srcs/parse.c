@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 03:04:57 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 09:02:54 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	parse_last_process(t_proc *proc, char **envp)
 			exe = split_command(proc->cmd);
 			if (!exe)
 				return (error_msg("malloc"));
-			execute_builtin_command(proc->cmd, exe, proc->env_lst);
+			execute_builtin_command(proc, exe, proc->env_lst);
 		}
 		else
 			handle_last_command(proc, proc->cmd);

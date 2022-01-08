@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/07 21:37:34 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 10:23:16 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,10 @@ char	*expand_env_var(char *data, int start, char **new_data)
 	return (data);
 }
 
-char	*expand_in_quot_env_var(char *data, int start, int end)
+char	*expand_in_quot_env_var(char *data, int start, int end, int i)
 {
 	char	*new_data;
 	char	*temp;
-	int		i;
 
 	new_data = ft_strndup(data, start);
 	if (!new_data)
@@ -75,6 +74,7 @@ char	*expand_in_quot_env_var(char *data, int start, int end)
 		return (ft_free(new_data));
 	i = -1;
 	while (data[++i])
+	{
 		if (data[i] == '$')
 		{
 			data = expand_env_var(data, i, &new_data);
@@ -82,6 +82,7 @@ char	*expand_in_quot_env_var(char *data, int start, int end)
 				return (ft_free(new_data));
 			i = -1;
 		}
+	}
 	temp = new_data;
 	new_data = ft_strjoin(new_data, data);
 	ft_free(temp);
@@ -98,7 +99,7 @@ char	*del_big_quot_token(char *data, int start, char **new_data)
 	temp = NULL;
 	end = find_valid_quot_point(data, start);
 	if (find_env_var_token(data, start, end) == TRUE)
-		temp = expand_in_quot_env_var(data, start, end);
+		temp = expand_in_quot_env_var(data, start, end, -1);
 	else
 		temp = my_strtrim(data, start, end);
 	if (!temp)

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 18:13:03 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/08 03:05:49 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/08 13:27:50 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +56,7 @@ int	check_builtin_command(t_list *cmd)
 	return (FALSE);
 }
 
-void	*ft_free2(char **p)
-{
-	int	i;
-
-	i = -1;
-	while (p[++i])
-	{
-		if (p[i])
-		{
-			free(p[i]);
-			p[i] = NULL;
-		}
-	}
-	free(p[i]);
-	free(p);
-	return (NULL);
-}
-
-void	execute_builtin_command(t_list *cmd, char **exe, char **env_lst)
+void	execute_builtin_command(t_proc *proc, char **exe, char **env_lst)
 {
 	/*if (ft_strncmp(cmd->content, "echo", 5) == 0)
 		ft_echo(exe);
@@ -91,35 +73,60 @@ void	execute_builtin_command(t_list *cmd, char **exe, char **env_lst)
 	if (ft_strncmp(cmd->content, "exit" 5) == 0)
 		ft_exit(exe);*/
 	env_lst = NULL;
-	cmd = cmd->next;
+	proc = NULL;
 	ft_free2(exe);
 }
 
-/*char	*ft_getenv(char *pre_env, char **env_lst)
+char	*ft_getenv(char *pre_env, char **env_lst)
 {
+	if (pre_env[0] == '?')
+		return ("[exit]");
+	return (getenv(pre_env));
+	env_lst = 0;
+}
 
-}*/
-
-void	get_input(char **envp)
+void	init_term(t_set *set)
 {
-	char	*input;
+	set->new_term.c_lflag &= 0;
+	set->new_term.c_cc[VMIN] = 0;
+	set->new_term.c_cc[VTIME] = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &set->org_term);
+}
+
+void	handler(int status)
+{
+	if (status == SIGINT)
+	{
+		rl_replace_line("", 0);
+		rl_redisplay();
+		rl_done = 1;
+		rl_on_new_line();
+	}
+}
+
+void	handle_ctrl(char *input, t_set *set)
+{
+	if (!input)
+	{
+		//printf("exit\n");
+		reset_set(set);
+		exit(0);
+	}
+	//init_term(set);
+}
+
+void	parse_input(char *input, char **envp)
+{
 	t_list	*token;
 
-	input = readline("$ ");
-	token = NULL;
-	if (input)
+	add_history(input);
+	if (split_token(input, &token) == TRUE && check_token(token) == TRUE)
 	{
-		add_history(input);
-		if (split_token(input, &token) == TRUE && check_token(token) == TRUE)
-		{
-			handle_heredoc(token);
-			parse_pipe_token(token, envp);
-			while (wait(0) > 0)
-			{
-			}
-		}
+		handle_heredoc(token);
+		parse_pipe_token(token, envp);
+		while (wait(0) > 0)
+			continue ;
 	}
-	input = ft_free(input);
 	ft_lstclear(&token, free);
 }
 
@@ -128,12 +135,18 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	t_set	set;
+	char	*input;
 
 	init_set(&set);
 	while (1)
 	{
-		get_input(envp);
-		reset_set(&set);
+		//signal(SIGINT, handler);
+		input = readline("$ ");
+		if (!input)
+			handle_ctrl(input, &set);
+		parse_input(input, envp);
+		input = ft_free(input);
+		reset_stdio(&set);
 		//system("leaks minishell");
 	}
 	return (0);
