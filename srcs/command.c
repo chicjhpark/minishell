@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:42:30 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 05:56:51 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,18 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd)
 		dup2(proc->outfile, STDOUT_FILENO);
 	else
 		dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
 	exe = split_command(cmd);
 	if (!exe)
 		return (error_msg("malloc"));
 	if (check_builtin_command(proc->cmd) == TRUE)
 		execute_builtin_command(proc, exe);
-	if (exe[0][0] == '/' || exe[0][0] == '.')
+	else if (exe[0][0] == '/' || exe[0][0] == '.')
+	{
 		if (execve(exe[0], exe, 0) == -1)
 			return (error_msg(exe[0]));
-	close(fd[1]);
-	if (execve(find_path(exe[0], proc->org_env), exe, 0) == -1)
+	}
+	else if (execve(find_path(exe[0], proc->org_env), exe, 0) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }

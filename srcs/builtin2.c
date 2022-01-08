@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:02:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:42:04 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:25:40 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*read_value_of_key(t_env *env_list, char *key)
 	while (env_list)
 	{
 		if (!ft_strcmp(env_list->key, key))
-			return (env_list->value);
+			return (ft_strdup(env_list->value));
 		env_list = env_list->next;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:41:49 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:16:44 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,6 @@ void	debug(t_list *lst, char *name)
 		printf("%s [%d] : %s\n", name, i, (char *)lst->content);
 		lst = lst->next;
 		i++;
-	}
-}
-
-void	handle_heredoc(t_list *token)
-{
-	int	org_stdin;
-
-	org_stdin = dup(STDIN_FILENO);
-	while (token)
-	{
-		if (strncmp(token->content, "<<", 3) == 0)
-		{
-			dup2(org_stdin, STDIN_FILENO);
-			heredoc(token->next->content);
-			token = token->next;
-		}
-		token = token->next;
 	}
 }
 
@@ -75,6 +58,14 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 		ft_exit(exe);
 }
 
+void	ft_replace_line(int var_stat)
+{
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_stat = var_stat;
+}
+
 void	handler(int status)
 {
 	pid_t	pid;
@@ -85,10 +76,7 @@ void	handler(int status)
 		if (pid == -1)
 		{
 			write(1, "\n", 1);
-			rl_replace_line("", 0);
-			rl_on_new_line();
-			rl_redisplay();
-			g_stat = 1;
+			ft_replace_line(1);
 		}
 		else
 		{
@@ -102,12 +90,7 @@ void	handler(int status)
 		g_stat = 131;
 	}
 	else
-	{
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		g_stat = 131;
-	}
+		ft_replace_line(131);
 }
 
 void	parse_input(char *input, t_env *env, char **envp)

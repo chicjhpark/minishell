@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 08:14:17 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:43:23 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:08:12 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	get_next_line(char **line)
 {
 	char	buf;
 	int		ret;
+
 	*line = (char *)malloc(1);
 	if (*line == NULL)
 		return (-1);
@@ -91,4 +92,21 @@ int	heredoc(char *limiter)
 	else
 		return (error_msg("fork"));
 	return (TRUE);
+}
+
+void	handle_heredoc(t_list *token)
+{
+	int	org_stdin;
+
+	org_stdin = dup(STDIN_FILENO);
+	while (token)
+	{
+		if (strncmp(token->content, "<<", 3) == 0)
+		{
+			dup2(org_stdin, STDIN_FILENO);
+			heredoc(token->next->content);
+			token = token->next;
+		}
+		token = token->next;
+	}
 }
