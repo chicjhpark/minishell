@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:42:27 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:57:08 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int		parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp);
 
 char	*expand_data(t_proc *proc, char *data);
 char	*del_small_quot_token(char *data, int start, char **new_data);
+char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data);
 
 int		heredoc(char *limiter);
 void	handle_heredoc(t_list *token);
@@ -127,5 +128,6 @@ int		check_builtin_command(t_list *cmd);
 void	execute_builtin_command(t_proc *proc, char **exe);
 
 char	*parse_pre_env_var(char *data, int start, char *new_data);
+char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 06:53:23 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 06:56:36 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,6 @@ char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data)
 	return (data);
 }
 
-char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data)
-{
-	int	i;
-
-	i = -1;
-	while (data[++i])
-	{
-		if (data[i] == '$')
-		{
-			data = expand_env_var(proc, data, i, new_data);
-			if (!data)
-				return (ft_free(*new_data));
-			i = -1;
-		}
-	}
-	return (data);
-}
-
 char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end)
 {
 	char	*new_data;
@@ -98,7 +80,7 @@ char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end)
 	return (new_data);
 }
 
-char	*del_big_quot_token(t_proc *proc, char *data, int start, char **new_data)
+char	*del_big_quot(t_proc *proc, char *data, int start, char **new_data)
 {
 	char	*org_data;
 	char	*temp;
@@ -135,7 +117,7 @@ char	*expand_data(t_proc *proc, char *data)
 		if (data[i] == '\'' && i != find_valid_quot_point(data, i))
 			data = del_small_quot_token(data, i, &new_data);
 		else if (data[i] == '\"' && i != find_valid_quot_point(data, i))
-			data = del_big_quot_token(proc, data, i, &new_data);
+			data = del_big_quot(proc, data, i, &new_data);
 		else if (data[i] == '$')
 			data = expand_env_var(proc, data, i, &new_data);
 		else
