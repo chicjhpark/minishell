@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:42:15 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 22:19:39 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 23:28:31 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*parse_pre_env_var(char *data, int start, char *new_data)
 	org_data = new_data;
 	temp = ft_strndup(data, start);
 	if (!temp)
-		return (NULL);
+		return (ft_free(org_data));
 	new_data = ft_strjoin(new_data, temp);
 	ft_free(temp);
 	ft_free(org_data);
