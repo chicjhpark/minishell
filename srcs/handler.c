@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:58:55 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:23:05 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 20:45:08 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 	if (ft_strncmp(proc->cmd->content, "pwd", 4) == 0)
 		ft_pwd();
 	if (ft_strncmp(proc->cmd->content, "export", 7) == 0)
-		ft_export(&exe[1], proc->env_lst);
+		ft_export(&exe[1], proc->env_lst, 0, 0);
 	if (ft_strncmp(proc->cmd->content, "unset", 6) == 0)
 		ft_unset(&exe[1], &proc->env_lst);
 	if (ft_strncmp(proc->cmd->content, "env", 4) == 0)

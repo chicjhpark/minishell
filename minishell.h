@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:54:14 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 20:44:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		export_key_syntax_error(char *s);
 int		export_key_syntax_check(char *s);
 void	reset_env_print_check(t_env *env_list);
 void	print_env_in_order(t_env *env_list);
-void	ft_export(char **dbuf, t_env *env_list);
+void	ft_export(char **dbuf, t_env *env_list, char **splits, t_env *temp);
 int		valid_exit_arg(char	*arg);
 int		exit_numeric_arg_cal(char *arg);
 void	exit_extra_cases(int c, char *s);
