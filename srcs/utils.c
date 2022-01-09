@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:39 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:05:05 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/10 00:27:22 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int	error_msg(char *msg)
 		write(2, "syntax error near unexpected token 'newline'", 44);
 	else if (msg[0] == '|' || msg[0] == '<' || msg[0] == '>')
 	{
-		write(2, "syntax error near unexpected token ", 35);
-		write(2, "'", 1);
+		write(2, "syntax error near unexpected token '", 36);
 		write(2, msg, ft_strlen(msg));
 		write(2, "'", 1);
+		return (ERROR);
 	}
 	else
 	{

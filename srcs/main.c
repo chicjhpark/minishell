@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 23:44:37 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/10 00:30:18 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	main(int argc, char **argv, char **envp)
 		input = ft_free(input);
 		reset_stdio(&set);
 		ft_free_split(envp);
-		system("leaks minishell");
 	}
 	return (0);
 }
