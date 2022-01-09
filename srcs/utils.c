@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:39 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/10 00:27:22 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/10 03:23:09 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	error_msg(char *msg)
 	{
 		write(2, "syntax error near unexpected token '", 36);
 		write(2, msg, ft_strlen(msg));
-		write(2, "'", 1);
+		write(2, "'\n", 2);
 		return (ERROR);
 	}
 	else

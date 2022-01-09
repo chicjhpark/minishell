@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 23:36:31 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/10 03:23:58 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	parse_std_inout_redirection(t_proc *proc, t_list *data, char *temp)
 {
 	if (ft_strncmp(data->content, "<<", 3) == 0)
-		ft_lstadd_back(&proc->limiter, ft_lstnew(temp));
+		ft_lstadd_back(&proc->limiter, ft_lstnew(ft_strdup(temp)));
 	if (ft_strncmp(data->content, "<", 3) == 0)
 	{
 		proc->infile = open(temp, O_RDONLY);
