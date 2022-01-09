@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:57:31 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:42:36 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 21:42:41 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	find_env_var_token(char *data, int start, int end)
 	find = start + 1;
 	while (data[find] && find < end && data[find] != '$')
 		find++;
-	if (!find)
+	if (find == end)
 		return (FALSE);
 	return (TRUE);
 }

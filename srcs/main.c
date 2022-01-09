@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:47:14 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 22:21:14 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	main(int argc, char **argv, char **envp)
 		parse_input(input, env, envp);
 		input = ft_free(input);
 		reset_stdio(&set);
+		system("leaks minishell");
 	}
 	return (0);
 }
