@@ -1,45 +1,24 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    Makefile2                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/09 07:00:10 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/09 18:53:51 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -g3 -fsanitize=address -Wall -Werror -Wextra
+CFLAGS			= -g -g3 -fsanitize=address -Wall -Werror -Wextra
 
-LIBR				:=
-# LIBR				+= -I/opt/homebrew/Cellar/readline/8.1.1/include
-# LIBR				+= -L/opt/homebrew/Cellar/readline/8.1.1/share/readline
-LIBR				+= "-L/Users/$(USER)/.brew/opt/readline/lib"
-LIBR				+= "-I/Users/$(USER)/.brew/opt/readline/include"
-# LIBR         += -I/usr/local/opt/readline/include
-# LIBR         += -L/usr/local/opt/readline/lib
+LDFLAGS			="-L/Users/$(USER)/.brew/opt/readline/lib"
+CPPFLAGS		="-I/Users/$(USER)/.brew/opt/readline/include"
 
-
-LINKER			:=
-LINKER			+= -Llibft -lft
-LINKER			+= -lreadline
-
-INCLUDES    	:=
-# INCLUDES		+= -L/opt/homebrew/Cellar/readline/8.1.1/share/readline
-INCLUDES		+= -I/opt/homebrew/Cellar/readline/8.1.1/include
-# INCLUDES		+= -L/Users/jhpark/.brew/Cellar/readline/8.1.1/include
-# INCLUDES		+= -L/Users/jhpark/.brew/Cellar/readline/8.1.1/include
-# INCLUDES		+= -I/Users/jhpark/.brew/Cellar/readline/8.1.1/include
-# INCLUDES		+= "-L/Users/$(USER)/.brew/opt/readline/lib"
-# INCLUDES		+= "-I/Users/$(USER)/.brew/opt/readline/include"
-# INCLUDES		+= -I/usr/local/opt/readline/include
-# INCLUDES		+= -L/usr/local/opt/readline/lib
-INCLUDES    	+= -I. -Ilibft
-INCLUDES    	+= -I/usr/local/opt/readline/include
+INCS			= -Ilibft -I.
 
 SRCS_DIR		= srcs
 SRCS_NAME		= main.c \
@@ -69,7 +48,7 @@ LIB_NAME		= ft
 LIB				= $(addprefix $(LIB_DIR)/, libft.a)
 
 $(NAME)			: $(LIB) $(OBJS)
-					$(CC) $(CFLAGS) $(INCLUDES) $(LIBR) $(LINKER) -lncurses $(OBJS) -o $@
+					$(CC) $(CFLAGS) $(INCS) -L$(LIB_DIR) -l$(LIB_NAME) -lreadline $(LDFLAGS) $(CPPFLAGS) -lncurses $(OBJS) -o $@
 
 $(LIB)			:
 					$(MAKE) -C $(LIB_DIR) all
@@ -77,7 +56,7 @@ $(LIB)			:
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c
 					mkdir -p $(OBJS_DIR)
-					$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+					$(CC) $(CFLAGS) $(INCS) $(CPPFLAGS) -c $< -o $@
 
 all				: $(NAME)
 
