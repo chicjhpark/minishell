@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 09:43:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 07:04:13 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:09:24 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	init_set2(t_set *set)
 	set->new_term.c_cc[VMIN] = 1;
 	set->new_term.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &set->new_term);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	reset_set(t_set *set)

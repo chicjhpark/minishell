@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 18:43:13 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:09:35 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,18 @@ int	main(int argc, char **argv, char **envp)
 	argc = 0;
 	argv = 0;
 	init_set(&set, &env, envp);
-	signal(SIGQUIT, ft_handler);
 	signal(SIGINT, ft_handler);
 	while (1)
 	{
 		init_set2(&set);
 		input = readline("$ ");
+		signal(SIGQUIT, ft_handler);
 		if (!input)
 		{
 			reset_set(&set);
 			exit(0);
 		}
 		tcsetattr(STDIN_FILENO, TCSANOW, &set.org_term);
-		//signal(SIGQUIT, ft_handler);
 		parse_input(input, env, envp);
 		input = ft_free(input);
 		reset_stdio(&set);
