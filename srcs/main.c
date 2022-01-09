@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 23:36:41 by han_woori        ###   ########.fr       */
+/*   Updated: 2022/01/09 23:41:01 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGINT, ft_handler);
 	while (1)
 	{
-		init_set2(&set, &envp, env);//
+		init_set2(&set, &envp, env);
 		input = readline("$ ");
-		// input = ft_strdup("unset");
 		signal(SIGQUIT, ft_handler);
 		if (!input)
 		{
@@ -55,8 +54,8 @@ int	main(int argc, char **argv, char **envp)
 		parse_input(input, env, envp);
 		input = ft_free(input);
 		reset_stdio(&set);
-		ft_free_split(envp);//
-		// system("leaks minishell");
+		ft_free_split(envp);
+		system("leaks minishell");
 	}
 	return (0);
 }
