@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:08:32 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:18:30 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**split_command(t_list *cmd)
 	return (exe);
 }
 
-int	execute_command(t_proc *proc, t_list *cmd, int *fd)
+int	execute_command(t_proc *proc, t_list *cmd, int *fd, char **envp)
 {
 	char	**exe;
 
@@ -82,12 +82,12 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd)
 		if (execve(exe[0], exe, 0) == -1)
 			return (error_msg(exe[0]));
 	}
-	else if (execve(find_path(exe[0], proc->org_env), exe, 0) == -1)
+	else if (execve(find_path(exe[0], proc->org_env), exe, envp) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }
 
-int	handle_command(t_proc *proc, t_list *cmd)
+int	handle_command(t_proc *proc, t_list *cmd, char **envp)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -96,7 +96,7 @@ int	handle_command(t_proc *proc, t_list *cmd)
 		return (error_msg("pipe"));
 	pid = fork();
 	if (pid == 0)
-		exit(execute_command(proc, cmd, fd));
+		exit(execute_command(proc, cmd, fd, envp));
 	else if (pid > 0)
 	{
 		close(fd[1]);
@@ -112,7 +112,7 @@ int	handle_command(t_proc *proc, t_list *cmd)
 	return (0);
 }
 
-int	handle_last_command(t_proc *proc, t_list *cmd)
+int	handle_last_command(t_proc *proc, t_list *cmd, char **envp)
 {
 	pid_t	pid;
 	char	**exe;
@@ -128,9 +128,9 @@ int	handle_last_command(t_proc *proc, t_list *cmd)
 		if (check_builtin_command(proc->cmd) == TRUE)
 			execute_builtin_command(proc, exe);
 		if (exe[0][0] == '/' || exe[0][0] == '.')
-			proc->status = execve(exe[0], exe, 0);
+			proc->status = execve(exe[0], exe, envp);
 		else
-			proc->status = execve(find_path(exe[0], proc->org_env), exe, 0);
+			proc->status = execve(find_path(exe[0], proc->org_env), exe, envp);
 		if (proc->status == -1)
 			exit(error_msg(exe[0]));
 	}

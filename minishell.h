@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 07:04:22 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:18:10 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ char	*expand_env_var(t_proc *proc, char *data, int start, char **new_data);
 int		heredoc(char *limiter);
 void	handle_heredoc(t_list *token);
 
-int		handle_command(t_proc *proc, t_list *cmd);
-int		handle_last_command(t_proc *proc, t_list *cmd);
+int		handle_command(t_proc *proc, t_list *cmd, char **envp);
+int		handle_last_command(t_proc *proc, t_list *cmd, char **envp);
 char	**split_command(t_list *cmd);
 
 int		check_builtin_command(t_list *cmd);
