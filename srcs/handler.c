@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:58:55 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 18:59:09 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:10:33 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,6 @@ void	ft_handler(int status)
 		write(1, "Quit: 3\n", 8);
 		g_stat = 131;
 	}
-	/*else if (status == SIGQUIT && pid == -1)
-	{
-		ft_replace_line(131);
-		g_stat = 131;
-	}*/
 	else
 		ft_replace_line(131);
 }
