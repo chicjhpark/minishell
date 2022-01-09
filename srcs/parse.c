@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:08:56 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 22:15:11 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	parse_data(t_proc *proc, t_list *data)
 				return (error_msg("malloc"));
 			else if (parse_std_inout_redirection(proc, data, temp) == ERROR)
 				return (ERROR);
+			ft_free(temp);
 			data = data->next;
 		}
 		else

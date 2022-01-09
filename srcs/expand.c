@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/28 21:11:16 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:11:41 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 23:37:41 by han_woori        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ char	*expand_in_quot_env_var(t_proc *proc, char *data, int start, int end)
 	data = ft_strndup(data, end - start - 1);
 	if (!data)
 		return (ft_free(new_data));
+	temp = data;
 	data = expand_in_quot_utils(proc, data, &new_data);
 	if (!data)
 		return (NULL);
@@ -94,7 +95,7 @@ char	*del_big_quot(t_proc *proc, char *data, int start, char **new_data)
 	else
 		temp = my_strtrim(data, start, end);
 	if (!temp)
-		return (NULL);
+		return (ft_free(org_data));
 	*new_data = ft_strjoin(*new_data, temp);
 	ft_free(org_data);
 	ft_free(temp);

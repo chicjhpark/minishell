@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:01:00 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:02:23 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 23:38:02 by han_woori        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,8 @@ void	print_env_in_order(t_env *env_list)
 	reset_env_print_check(env_list);
 }
 
-void	ft_export(char **dbuf, t_env *env_list)
+void	ft_export(char **dbuf, t_env *env_list, char **splits, t_env *temp)
 {
-	char	**splits;
-	t_env	*temp;
-
 	if (!dbuf[0])
 	{
 		g_stat = 0;
@@ -103,6 +100,7 @@ void	ft_export(char **dbuf, t_env *env_list)
 			continue ;
 		}
 		env_lstadd_back(&env_list, temp, splits[0], splits[1]);
+		free(splits);
 	}
 	g_stat = 0;
 }
