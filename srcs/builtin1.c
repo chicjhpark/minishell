@@ -6,13 +6,13 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:02:06 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:33:12 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/10 03:42:59 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cd_error(int	err, char *arg)
+void	cd_error(int err, char *arg)
 {
 	char	*errmsg;
 
