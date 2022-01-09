@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:58:55 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 08:56:52 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 18:46:01 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,38 @@ void	ft_replace_line(int var_stat)
 	g_stat = var_stat;
 }
 
+// void	ft_handler(int status)
+// {
+// 	pid_t	pid;
+
+// 	pid = waitpid(-1, 0, WNOHANG);
+// 	if (status == SIGINT)
+// 	{
+// 		if (pid == -1)
+// 		{
+// 			write(1, "\n", 1);
+// 			ft_replace_line(1);
+// 		}
+// 		else
+// 		{
+// 			write(1, "\n", 1);
+// 			g_stat = 130;
+// 		}
+// 	}
+// 	else if (status == SIGQUIT && pid != -1)
+// 	{
+// 		write(1, "Quit: 3\n", 8);
+// 		g_stat = 131;
+// 	}
+// 	else if (status == SIGQUIT && pid == -1)
+// 	{
+// 		ft_replace_line(131);
+// 		g_stat = 131;
+// 	}
+// 	else
+// 		ft_replace_line(131);
+// }
+
 void	ft_handler(int status)
 {
 	pid_t	pid;
@@ -76,11 +108,11 @@ void	ft_handler(int status)
 		write(1, "Quit: 3\n", 8);
 		g_stat = 131;
 	}
-	else if (status == SIGQUIT && pid == -1)
+	/*else if (status == SIGQUIT && pid == -1)
 	{
 		ft_replace_line(131);
 		g_stat = 131;
-	}
+	}*/
 	else
 		ft_replace_line(131);
 }

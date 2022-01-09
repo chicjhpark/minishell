@@ -6,24 +6,11 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:41:46 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 09:01:57 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 18:43:13 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	debug(t_list *lst, char *name)
-{
-	int	i;
-
-	i = 0;
-	while (lst)
-	{
-		printf("%s [%d] : %s\n", name, i, (char *)lst->content);
-		lst = lst->next;
-		i++;
-	}
-}
 
 void	parse_input(char *input, t_env *env, char **envp)
 {
