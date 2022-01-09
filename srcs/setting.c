@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 09:43:52 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:55:25 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 22:47:42 by gunkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ void	init_set(t_set *set, t_env **env, char **envp)
 	tcsetattr(STDIN_FILENO, TCSANOW, &set->new_term);
 }
 
-void	init_set2(t_set *set)
+void	init_set2(t_set *set, char ***envp, t_env *env)
 {
+	*envp = convert_env_lst_to_dp(env);
 	tcgetattr(STDIN_FILENO, &set->new_term);
 	set->new_term.c_lflag &= ECHO;
 	set->new_term.c_cc[VMIN] = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: whan <whan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 06:58:55 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:40:06 by whan             ###   ########.fr       */
+/*   Updated: 2022/01/09 20:13:24 by gunkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_builtin_command(t_list *cmd)
 }
 
 void	execute_builtin_command(t_proc *proc, char **exe)
-{	
+{
 	if (ft_strncmp(proc->cmd->content, "echo", 5) == 0)
 		ft_echo(&exe[1]);
 	if (ft_strncmp(proc->cmd->content, "cd", 3) == 0)
@@ -35,7 +35,7 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 	if (ft_strncmp(proc->cmd->content, "pwd", 4) == 0)
 		ft_pwd();
 	if (ft_strncmp(proc->cmd->content, "export", 7) == 0)
-		ft_export(&exe[1], proc->env_lst, 0, 0);
+		ft_export(&exe[1], proc->env_lst);
 	if (ft_strncmp(proc->cmd->content, "unset", 6) == 0)
 		ft_unset(&exe[1], &proc->env_lst);
 	if (ft_strncmp(proc->cmd->content, "env", 4) == 0)

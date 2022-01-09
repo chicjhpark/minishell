@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:57:08 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 23:27:09 by gunkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path(char *cmd, char **env_lst)
+char	*find_path(char *cmd, char **env_lst, int i)
 {
 	char	**paths;
 	char	*path;
 	char	*temp;
-	int		i;
 
-	i = 0;
-	while (ft_strnstr(env_lst[i], "PATH=", 5) == NULL)
+	while (env_lst[i] && ft_strnstr(env_lst[i], "PATH=", 5) == NULL)
 		i++;
+	if (env_lst[i] == NULL)
+		return (cmd);
 	paths = ft_split(env_lst[i] + 5, ':');
 	i = 0;
 	while (paths[i])
@@ -38,7 +38,7 @@ char	*find_path(char *cmd, char **env_lst)
 		}
 		i++;
 	}
-	return (NULL);
+	return (cmd);
 }
 
 char	**split_command(t_list *cmd)
@@ -82,7 +82,7 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd, char **envp)
 		if (execve(exe[0], exe, 0) == -1)
 			return (error_msg(exe[0]));
 	}
-	else if (execve(find_path(exe[0], envp), exe, envp) == -1)
+	else if (execve(find_path(exe[0], envp, 0), exe, envp) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }
@@ -130,7 +130,7 @@ int	handle_last_command(t_proc *proc, t_list *cmd, char **envp)
 		else if (exe[0][0] == '/' || exe[0][0] == '.')
 			proc->status = execve(exe[0], exe, envp);
 		else
-			proc->status = execve(find_path(exe[0], envp), exe, envp);
+			proc->status = execve(find_path(exe[0], envp, 0), exe, envp);
 		if (proc->status == -1)
 			exit(error_msg(exe[0]));
 	}

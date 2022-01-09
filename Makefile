@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/09 19:23:59 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/09 23:30:32 by gunkim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS_NAME		= main.c \
 					split_token.c \
 					expand.c \
 					command.c \
+					convert.c \
 					heredoc.c \
 					builtin1.c \
 					builtin2.c \

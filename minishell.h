@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: whan <whan@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: gunkim <gunkim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 20:39:32 by whan             ###   ########.fr       */
+/*   Updated: 2022/01/09 23:29:55 by gunkim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		export_key_syntax_error(char *s);
 int		export_key_syntax_check(char *s);
 void	reset_env_print_check(t_env *env_list);
 void	print_env_in_order(t_env *env_list);
-void	ft_export(char **dbuf, t_env *env_list, char **splits, t_env *temp);
+void	ft_export(char **dbuf, t_env *env_list);
 int		valid_exit_arg(char	*arg);
 int		exit_numeric_arg_cal(char *arg);
 void	exit_extra_cases(int c, char *s);
@@ -92,7 +92,7 @@ char	*ft_strndup(char *s, int n);
 void	init_set(t_set *set, t_env **env, char **envp);
 void	reset_set(t_set *set);
 void	reset_stdio(t_set *set);
-void	init_set2(t_set *set);
+void	init_set2(t_set *set, char ***envp, t_env *env);
 
 int		split_token(char *input, t_list **token);
 int		split_rest_token(char *input, t_list **token);
@@ -130,5 +130,8 @@ void	ft_handler(int status);
 
 char	*parse_pre_env_var(char *data, int start, char *new_data);
 char	*expand_in_quot_utils(t_proc *proc, char *data, char **new_data);
+
+int		ft_env_lstsize(t_env *lst);
+char	**convert_env_lst_to_dp(t_env *env);
 
 #endif
