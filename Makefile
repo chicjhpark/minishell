@@ -1,19 +1,19 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile2                                          :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/10 02:30:08 by jaehpark          #+#    #+#              #
-#    Updated: 2022/01/09 18:53:51 by jaehpark         ###   ########.fr        #
+#    Updated: 2022/01/09 19:23:59 by jaehpark         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			= minishell
 
 CC				= gcc
-CFLAGS			= -g -g3 -fsanitize=address -Wall -Werror -Wextra
+CFLAGS			= -Wall -Werror -Wextra
 
 LDFLAGS			="-L/Users/$(USER)/.brew/opt/readline/lib"
 CPPFLAGS		="-I/Users/$(USER)/.brew/opt/readline/include"
