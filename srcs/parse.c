@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 13:58:37 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:18:08 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 20:08:56 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	parse_data(t_proc *proc, t_list *data)
 int	parse_process(t_proc *proc, t_env *env, char **envp)
 {
 	proc->env_lst = env;
-	proc->org_env = envp;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 		handle_command(proc, proc->cmd, envp);
 	ft_lstclear(&proc->limiter, free);
@@ -84,7 +83,6 @@ int	parse_last_process(t_proc *proc, t_env *env, char **envp)
 	char	**exe;
 
 	proc->env_lst = env;
-	proc->org_env = envp;
 	exe = NULL;
 	if (parse_data(proc, proc->data) == TRUE && proc->cmd)
 	{

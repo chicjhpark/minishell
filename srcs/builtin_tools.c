@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:01:56 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 01:06:58 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:55:34 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_env	*env_set(char	**envp)
 	{
 		splits = ft_split(*(envp++), '=');
 		env_lstadd_back(&env_list, temp, splits[0], splits[1]);
+		free(splits);
 	}
 	return (env_list);
 }

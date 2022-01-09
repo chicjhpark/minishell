@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:39 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 05:42:42 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 20:05:05 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,16 @@ void	*ft_free2(char **p)
 {
 	int	i;
 
+	if (!p)
+		return (NULL);
 	i = -1;
 	while (p[++i])
 	{
-		if (p[i])
-		{
-			free(p[i]);
-			p[i] = NULL;
-		}
+		free(p[i]);
+		p[i] = NULL;
 	}
 	free(p[i]);
+	p[i] = NULL;
 	free(p);
 	return (NULL);
 }

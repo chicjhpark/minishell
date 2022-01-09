@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 05:42:27 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:22:31 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:57:08 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	execute_command(t_proc *proc, t_list *cmd, int *fd, char **envp)
 		if (execve(exe[0], exe, 0) == -1)
 			return (error_msg(exe[0]));
 	}
-	else if (execve(find_path(exe[0], proc->org_env), exe, envp) == -1)
+	else if (execve(find_path(exe[0], envp), exe, envp) == -1)
 		return (error_msg(exe[0]));
 	return (0);
 }
@@ -130,7 +130,7 @@ int	handle_last_command(t_proc *proc, t_list *cmd, char **envp)
 		else if (exe[0][0] == '/' || exe[0][0] == '.')
 			proc->status = execve(exe[0], exe, envp);
 		else
-			proc->status = execve(find_path(exe[0], proc->org_env), exe, envp);
+			proc->status = execve(find_path(exe[0], envp), exe, envp);
 		if (proc->status == -1)
 			exit(error_msg(exe[0]));
 	}

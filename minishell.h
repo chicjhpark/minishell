@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 09:33:01 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 19:18:10 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 19:54:14 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ typedef struct s_proc
 	t_list	*data;
 	t_list	*cmd;
 	t_list	*limiter;
-	char	**org_env;
 	int		infile;
 	int		outfile;
 	int		pip_flg;
