@@ -6,7 +6,7 @@
 /*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/09 01:01:00 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/09 03:02:23 by jaehpark         ###   ########.fr       */
+/*   Updated: 2022/01/09 20:27:19 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ void	ft_export(char **dbuf, t_env *env_list)
 	{
 		splits = ft_split(*(dbuf++), '=');
 		if (!splits[1] || !export_key_syntax_check(splits[0]))
+		{
+			ft_free_split(splits);
 			continue ;
+		}
 		temp = env_dup_check(env_list, splits[0]);
 		if (temp)
 		{
@@ -102,6 +105,7 @@ void	ft_export(char **dbuf, t_env *env_list)
 			ft_free_split(splits);
 			continue ;
 		}
+		ft_free_split(splits);
 		env_lstadd_back(&env_list, temp, splits[0], splits[1]);
 	}
 	g_stat = 0;
