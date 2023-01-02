@@ -3,7 +3,7 @@
 - bash나 zsh과 같은 작고 간단한 쉘 프로그램입니다.
 ### Rules
 |                       |                                                                                              |
-| --------------------- | ------------------------------------------------------------------------------------------- |
+| --------------------- | -------------------------------------------------------------------------------------------- |
 | **Allowed functions** | readline, rl_on_new_line, rl_replace_line, rl_redisplay, add_history, printf, malloc, free, write, open, read, close, fork, wait, waitpid, wait3, wait4, signal, kill, exit, getcwd, chdir, stat, lstat, fstat, unlink, execve, dup, dup2, pipe, opendir, readdir, closedir, strerror, errno, isatty, ttyname, ttyslot, ioctl, getenv, tcsetattr, tcgetattr, tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs |
 
 - 닫히지 않은 따옴표나 특정되지 않은 특수문자 (\나 ; 등...) 을 해석하지 않아야 합니다.
