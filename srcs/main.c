@@ -36,8 +36,8 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env;
 	char	*input;
 
-	argc = 0;
-	argv = 0;
+	argc = (int)argc;
+	argv = (char **)argv;
 	init_set(&set, &env, envp);
 	signal(SIGINT, ft_handler);
 	while (1)
