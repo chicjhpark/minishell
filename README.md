@@ -34,4 +34,4 @@
   - ctrl-C는 새로운 줄에 새로운 프롬프트를 출력합니다
   - ctrl-D는 쉘을 종료합니다.
   - ctrl-\은 아무런 동작도 하지 않습니다.
-### development document
+### Development document
