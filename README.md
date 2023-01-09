@@ -21,5 +21,6 @@ $> ./minishell
 - 리다이렉션 `<, >, <<, >>`
 - 파이프 `|`
 - 환경 변수 `$`
+- 종료 상태 코드 (exit status) `$?`
 - `ctrl-C`, `ctrl-D`, `ctrl-\`
 ### Development Report
