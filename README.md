@@ -4,7 +4,6 @@
 ### Directions
 ```
 $> make
-$> ./minishell
 ```
 ![minishell_directions](https://user-images.githubusercontent.com/69841779/211287293-3b0b73f6-ec0c-4532-9a45-de90007e83b8.gif)
 ### Implementation List
