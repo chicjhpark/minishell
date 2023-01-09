@@ -43,11 +43,13 @@ int	get_next_line(char **line)
 	if (*line == NULL)
 		return (-1);
 	(*line)[0] = 0;
+	read(0, &buf, 1);
 	while (buf != '\n' && buf != '\0')
 	{
 		*line = sum(*line, buf);
 		if (*line == 0)
 			return (-1);
+		read(0, &buf, 1);
 	}
 	if (buf == '\n')
 		return (1);
