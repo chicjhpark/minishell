@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaehpark <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jaehpark <jaehpark@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/10 00:34:04 by jaehpark          #+#    #+#             */
-/*   Updated: 2022/01/10 00:34:08 by jaehpark         ###   ########.fr       */
+/*   Updated: 2023/01/16 16:52:39 by jaehpark         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	execute_builtin_command(t_proc *proc, char **exe)
 	if (ft_strncmp(proc->cmd->content, "exit", 5) == 0)
 		ft_exit(&exe[1]);
 	free(exe);
+	if (proc->pip_flg == true)
+		exit(0);
 }
 
 void	ft_replace_line(int var_stat)
