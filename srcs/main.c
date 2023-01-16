@@ -22,7 +22,7 @@ void	parse_input(char *input, t_env *env, char **envp)
 	{
 		handle_heredoc(token);
 		parse_pipe_token(token, env, envp);
-		while (waitpid(-1, &g_stat, 0) > 0)
+		while (wait(&g_stat) > 0)
 			continue ;
 	}
 	if (WIFEXITED(g_stat))
