@@ -33,5 +33,7 @@ $> make
 > 최대한 많은 케이스를 bash에서 실행해가며 어떤 순서로 동작하는지 유추해 가면서 그 순서에 맞게 파싱을 하고 에러 처리를 했다.
 2. 파이프는 병렬 처리가 되어야 한다.
 <img width="571" alt="스크린샷 2023-01-16 오후 4 08 31" src="https://user-images.githubusercontent.com/69841779/212618154-42db0db6-1c56-498d-87e5-c0b1d6b73949.png">
+
+[참조 페이지](http://web.cse.ohio-state.edu/~mamrak.1/CIS762/pipes_lab_notes.html)
   
 > 자식 프로세스는 각자 병렬적으로 실행시키도록 하고 부모 프로세스에서 wait라는 함수를 이용해서 모든 자식 프로세스가 종료되기 전까지 반복문을 통해 기다리게 했다.
