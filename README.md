@@ -22,7 +22,6 @@ $> make
 - 종료 상태 코드 (exit status) `$?`
 - `ctrl-C`, `ctrl-D`, `ctrl-\`
 ### Development Report
-#### 문제 해결
 - 리다이렉션, 파이프, 환경변수, 따옴표 등 구분자들이 어떻게 어떤 순서로 들어오냐에 따라서 결과값과 에러 처리가 달라진다.
 <img width="406" alt="스크린샷 2023-01-18 오전 7 25 40" src="https://user-images.githubusercontent.com/69841779/213025909-e8639894-1ffb-46f0-bee5-73799ca60434.png">
 
