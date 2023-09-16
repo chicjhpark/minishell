@@ -27,7 +27,7 @@
 # include <signal.h>
 # include "libft.h"
 
-# define ERROR		-1
+# define ERROR	-1
 
 int	g_stat;
 
